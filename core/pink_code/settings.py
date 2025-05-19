@@ -156,6 +156,8 @@ DATABASES = {
     }
 }
 
+
+
 CACHES = {
     'default': {
         'BACKEND': 'django_redis.cache.RedisCache',
