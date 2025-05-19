@@ -1,0 +1,95 @@
+version: '3.8'
+
+services:
+  redis:
+    image: redis:latest
+    ports:
+      - "6380:6379"
+
+  db:
+    image: postgres:13
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    environment:
+      - POSTGRES_USER=pink_code
+      - POSTGRES_PASSWORD=pink_code
+      - POSTGRES_DB=pink_code
+    ports: # exposing the port is generally not recommended in production
+      - "5432:5432" #useful for debugging, remove in production
+    networks:
+      leetcode_network: # Explicitly associate with the leetcode_network
+        ipv4_address: 192.168.10.2 #optional, but can help with consistency
+
+  web:
+    build: .
+    command: python manage.py runserver 0.0.0.0:8000
+    volumes:
+      - .:/app
+    ports:
+      - "8000:8000"
+    depends_on:
+      - redis
+      - db  # Добавлена зависимость от сервиса базы данных
+    networks:
+      leetcode_network:
+        ipv4_address: 192.168.10.3
+      frontend_network: #connect to the frontend network
+        ipv4_address: 192.168.20.2
+
+  celery:
+    build: .
+    command: celery -A core.pink_code worker -P solo --loglevel=info
+    volumes:
+      - .:/app
+      - /var/run/docker.sock:/var/run/docker.sock
+    depends_on:
+      - redis
+      - web
+    environment:
+      - CELERY_BROKER_URL=redis://redis:6379/0
+    networks:
+      leetcode_network:
+        ipv4_address: 192.168.10.4
+
+  celery-beat:
+    build: .
+    command: celery -A core.pink_code beat --loglevel=info
+    volumes:
+      - .:/app
+      - /var/run/docker.sock:/var/run/docker.sock
+    depends_on:
+      - redis
+    environment:
+      - CELERY_BROKER_URL=redis://redis:6379/0
+    networks:
+      leetcode_network:
+        ipv4_address: 192.168.10.5
+  
+  frontend: #service for the frontend
+    image: nginx:latest #you can use a simple nginx image
+    ports:
+      - "3000:80" #map port 80 inside the container to 3000 on the host
+    volumes:
+      - ./frontend:/usr/share/nginx/html #mount your frontend files
+    depends_on: #start this after the backend
+      - web
+    networks:
+      frontend_network:
+        ipv4_address: 192.168.20.3
+
+networks:
+  leetcode_network:
+    name: leetcode_network
+    ipam:
+      driver: default
+      config:
+        - subnet: 192.168.10.0/24 # Define a subnet for leetcode_network
+  frontend_network: #define a new network for the frontend
+    name: frontend_network
+    ipam:
+      driver: default
+      config:
+        - subnet: 192.168.20.0/24
+    
+volumes:
+  postgres_data: #named volume for postgres data

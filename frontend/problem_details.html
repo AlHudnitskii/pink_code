@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Problem Details</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <style>
+        body {
+            background-color: #181818;
+            color: white;
+            margin: 0;
+            padding: 0;
+        }
+        .navbar {
+            margin-bottom: 20px;
+        }
+        .card {
+            background-color: #2a2a2a;
+            border: none;
+        }
+        .btn-custom {
+            background-color: #343a40;
+            color: white;
+        }
+        .btn-custom:hover {
+            background-color: #495057;
+        }
+        .nav-link {
+            color: white;
+        }
+        .nav-link:hover {
+            color: #ccc;
+        }
+        .table-dark th, .table-dark td {
+            color: #fff;
+        }
+        .problem-container {
+            display: flex;
+            flex-direction: row;
+            padding: 20px;
+        }
+        .problem-description, .problem-code {
+            flex: 1;
+            margin: 10px;
+        }
+        .code-editor {
+            flex: 1;
+            background-color: #1e1e1e;
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 10px;
+            height: 300px;
+        }
+        .testcase-container {
+            flex: 1;
+            background-color: #1e1e1e;
+            padding: 10px;
+            border-radius: 5px;
+        }
+        .testcase {
+            display: flex;
+            justify-content: space-between;
+        }
+        .testcase-output {
+            width: 85%;
+        }
+        .formatted-json {
+            white-space: pre-wrap;
+            background-color: #1e1e1e;
+            color: #dcdcdc;
+            padding: 10px;
+            border-radius: 5px;
+            font-family: monospace;
+            margin-top: 10px;
+        }
+        .json-bracket {
+            color: #a3a3a3;
+        }
+        .json-key {
+            color: #569cd6;
+        }
+        .json-value {
+            color: #ce9178;
+        }
+        .json-array {
+            display: inline;
+        }
+        .rating-container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+        .rating {
+            display: flex;
+            align-items: center;
+        }
+        .rating i {
+            font-size: 24px;
+            margin-right: 10px;
+            cursor: pointer;
+        }
+        .rating span {
+            font-size: 18px;
+            margin-right: 20px;
+        }
+        .disabled {
+            opacity: 0.5;
+        }
+        .alert-popup {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1050;
+            display: none;
+        }
+    </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.12/ace.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.12/mode-python.js"></script>
+</head>
+<body>
+    <!-- Message -->
+    <div class="alert alert-success alert-dismissible fade show alert-popup" role="alert">
+        <strong>Success!</strong> This solution was save.
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <a class="navbar-brand" href="index.html">LeetCode Analogue</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Explore</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="problems.html">Problems</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="create_problem.html">Create problem</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Discuss</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="top_users.html">Top</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="profile.html">Profile</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container-fluid">
+        <div class="problem-container">
+            <div class="problem-description">
+                <h2 id="problem-title">1. Two Sum</h2>
+                <p><strong>Difficulty:</strong> <span id="problem-difficulty">Easy</span></p>
+                <div class="rating-container">
+                    <div class="rating">
+                        <i class="fas fa-thumbs-up" id="like-btn"></i><span id="likes">0</span>
+                        <i class="fas fa-thumbs-down" id="dislike-btn"></i><span id="dislikes">0</span>
+                    </div>
+                    <div>
+                        <strong>Solutions:</strong> <span id="count-solutions">0</span>
+                    </div>
+                </div>
+                <hr>
+                <h3 id="problem-subtitle"></h3>
+                <p id="problem-description"></p>
+                <div id="test-cases">
+                    <h5>Test Cases</h5>
+                    <div class="table-responsive">
+                        <table class="table table-dark table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Input</th>
+                                    <th>Expected Output</th>
+                                </tr>
+                            </thead>
+                            <tbody id="testcase-table-body">
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="problem-code">
+                <div class="code-editor" id="code-editor">
+                    <h5>Code</h5>
+                    <div id="editor" style="height: 300px; width: 100%;"></div>
+                </div>
+                <div class="testcase-container">
+                    <h5>Test Result</h5>
+                    <div class="testcase-output">
+                        <label>Output:</label>
+                        <div id="test-output" class="formatted-json">Example output</div>
+                    </div>
+                    <button class="btn btn-custom mt-3" id="run-code">Run</button>
+                    <button class="btn btn-custom mt-3" id="submit-code">Submit</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+        const urlParams = new URLSearchParams(window.location.search);
+        const problemId = urlParams.get('id');
+        const token = localStorage.getItem('accessToken');
+        const userId = 1; // Replace with actual user ID
+
+        // Fetch problem details
+        fetch(`http://localhost:8000/api/main/problem/${problemId}/`, {
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json'
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            document.getElementById('problem-title').innerText = `${data.id}. ${data.title}`;
+            document.getElementById('problem-subtitle').innerText = data.subtitle;
+            document.getElementById('problem-description').innerText = data.description;
+            document.getElementById('problem-difficulty').innerText = data.difficulty;
+            document.getElementById('likes').innerText = data.rates.likes;
+            document.getElementById('dislikes').innerText = data.rates.dislikes;
+            document.getElementById('count-solutions').innerText = data.count_solutions;
+        })
+        .catch(error => console.error('Error fetching problem details:', error));
+
+        // Fetch test cases
+        fetch(`http://localhost:8000/api/main/problem/${problemId}/testcases?not_full=true`, {
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json'
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            const tbody = document.getElementById('testcase-table-body');
+            tbody.innerHTML = '';
+            data.forEach(testcase => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td>${testcase.input_data}</td>
+                    <td>${testcase.expected_output}</td>
+                `;
+                tbody.appendChild(tr);
+            });
+        })
+        .catch(error => console.error('Error fetching test cases:', error));
+
+        // Initialize Ace Editor
+        const editor = ace.edit("editor");
+        editor.setTheme("ace/theme/monokai");
+        editor.session.setMode("ace/mode/python");
+
+        function formatJSON(obj) {
+            const jsonStr = JSON.stringify(obj, null, 2);
+            return jsonStr.replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/(\{|\}|\[|\])/g, match => `<span class="json-bracket">${match}</span>`)
+                .replace(/("[^"]*")(\s*:\s*)/g, (match, p1, p2) => `<span class="json-key">${p1}</span>${p2}`)
+                .replace(/:\s*(-?\d+\.?\d*e?[+-]?\d*|-?\d+\.?\d*|true|false|null)/g, match => `: <span class="json-value">${match.slice(2)}</span>`)
+                .replace(/(\[)([^[]*?)(\])/g, (match, p1, p2, p3) => `${p1}<span class="json-array">${p2}</span>${p3}`);
+        }
+
+       function fetchTaskStatus(taskId, intervalId, saveResult) {
+            fetch(`http://localhost:8000/api/interpreter/task-status/${taskId}/`, {
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                }
+            })
+            .then(response => response.json())
+            .then(resultData => {
+                console.log('Result Data:', resultData);
+                if (resultData.state === 'SUCCESS') {
+                    clearInterval(intervalId);
+                    const formattedResult = formatJSON(resultData.result);
+                    document.getElementById('test-output').innerHTML = `<pre class="formatted-json">${formattedResult}</pre>`;
+                    if (saveResult && resultData.result.passed) { 
+                        saveSolution(resultData.result);
+                    }
+                } else if (resultData.state === 'FAILURE' || resultData.state === 'REVOKED') {
+                    clearInterval(intervalId);
+                    document.getElementById('test-output').innerText = 'Error: ' + resultData.result;
+                }
+            })
+            .catch(error => {
+                clearInterval(intervalId);
+                document.getElementById('test-output').innerText = 'Error fetching task status: ' + error.message;
+                console.error('Error fetching task status:', error);
+            });
+        }
+
+        function runCode(saveResult) {
+            const code = editor.getValue();
+            fetch(`http://localhost:8000/api/interpreter/run-code/${problemId}/`, {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ code: code })
+            })
+            .then(response => response.json())
+            .then(data => {
+                const taskId = data.task_id;
+                console.log('Task ID:', taskId);
+                const intervalId = setInterval(() => {
+                    fetchTaskStatus(taskId, intervalId, saveResult);
+                }, 2000);
+            })
+            .catch(error => {
+                document.getElementById('test-output').innerText = 'Error running code: ' + error.message;
+                console.error('Error running code:', error);
+            });
+        }
+        /*function submitCode(is_submit) {
+            const userCode = editor.getValue();
+            const problemId = parseInt(document.getElementById('problem-title').innerText.split('.')[0]);
+            const token = localStorage.getItem('token'); 
+
+            fetch(`http://localhost:8000/api/interpreter/submit-code/${problemId}/`, {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ code: userCode })
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok'); 
+                }
+                return response.json();
+            })
+            .then(data => {
+                if (is_submit) {
+                    saveSolution(problemId, data);
+                }
+            })
+            .catch(error => {
+                console.error('Error submitting code:', error);
+                alert('Error submitting code.');
+            });
+        } */
+         function submitCode(saveResult) {
+            const code = editor.getValue();
+            fetch(`http://localhost:8000/api/interpreter/submit-code/${problemId}/`, {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ code: code })
+            })
+            .then(response => response.json())
+            .then(data => {
+                const taskId = data.task_id;
+                console.log('Task ID:', taskId);
+                const intervalId = setInterval(() => {
+                    fetchTaskStatus(taskId, intervalId, saveResult);
+                }, 2000);
+            })
+            .catch(error => {
+                document.getElementById('test-output').innerText = 'Error running code: ' + error.message;
+                console.error('Error running code:', error);
+            });
+        } 
+
+        /*function saveSolution(result) {
+            const userId = localStorage.getItem('user_id'); 
+            fetch('http://localhost:8000/api/interpreter/save-solution/', {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    problem: problemId,
+                    user: parseInt(userId),
+                    lead_time: parseInt(result.lead_time_total_milliseconds),
+                    memory_used: "20.04",
+                    user_code: editor.getValue(),
+                    passed: result.passed
+                })
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                var alertElement = document.querySelector('.alert-popup');
+                alertElement.style.display = 'block';
+
+                setTimeout(function() {
+                    $(alertElement).alert('close');
+                }, 5000);
+                return response.text();
+            })
+            .then(saveData => {
+                if (saveData) {
+                    console.log('Save Data:', JSON.parse(saveData));
+                } else {
+                    console.log('Save Data: No content');
+                }
+            })
+            .catch(error => console.error('Error saving solution:', error));
+        } */
+
+        function saveSolution(result) {
+            const problemId = parseInt(document.getElementById('problem-title').innerText.split('.')[0]);
+            //const token = localStorage.getItem('token');
+            fetch(`http://localhost:8000/api/interpreter/save-solution//${problemId}/`, {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    problem: problemId,
+                    lead_time: parseInt(result.lead_time_total_milliseconds),
+                    memory_used: "20.04",
+                    user_code: editor.getValue(),
+                    passed: result.passed
+                })
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`Network response was not ok: ${response.status}`);
+                }
+                var alertElement = document.querySelector('.alert-popup');
+                alertElement.style.display = 'block';
+
+                setTimeout(function() {
+                    $(alertElement).alert('close');
+                }, 5000);
+                return response.text();
+            })
+            .then(saveData => {
+                if (saveData) {
+                    console.log('Save Data:', JSON.parse(saveData));
+                } else {
+                    console.log('Save Data: No content');
+                }
+            })
+            .catch(error => console.error('Error saving solution:', error));
+        }
+
+        function showAlert(message) {
+            const alertDiv = document.querySelector('.alert-popup');
+            if (alertDiv) {
+                alertDiv.querySelector('strong').textContent = message;
+                alertDiv.style.display = 'block';
+                setTimeout(() => {
+                    alertDiv.style.display = 'none';
+                }, 3000); 
+            }
+        }
+
+        function disableButtons() {
+            const likeBtn = document.getElementById('like-btn');
+            const dislikeBtn = document.getElementById('dislike-btn');
+            likeBtn.classList.add('disabled');
+            dislikeBtn.classList.add('disabled');
+            likeBtn.style.pointerEvents = 'none';
+            dislikeBtn.style.pointerEvents = 'none';
+        }
+
+        function likeProblem() {
+            fetch(`http://localhost:8000/api/main/problem/${problemId}/like/${userId}/`, {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                }
+            })
+            .then(response => {
+                if (response.ok) {
+                    document.getElementById('likes').innerText = parseInt(document.getElementById('likes').innerText) + 1;
+                    disableButtons();
+                } else {
+                    alert('Error liking the problem.');
+                }
+            })
+            .catch(error => console.error('Error liking problem:', error));
+        }
+
+        function dislikeProblem() {
+            fetch(`http://localhost:8000/api/main/problem/${problemId}/dislike/${userId}/`, {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                }
+            })
+            .then(response => {
+                if (response.ok) {
+                    document.getElementById('dislikes').innerText = parseInt(document.getElementById('dislikes').innerText) + 1;
+                    disableButtons();
+                } else {
+                    alert('Error disliking the problem.');
+                }
+            })
+            .catch(error => console.error('Error disliking problem:', error));
+        }
+
+        document.getElementById('run-code').addEventListener('click', () => runCode(false));
+        document.getElementById('submit-code').addEventListener('click', () => submitCode(true));
+        document.getElementById('like-btn').addEventListener('click', likeProblem);
+        document.getElementById('dislike-btn').addEventListener('click', dislikeProblem);
+
+
+    </script>
+</body>
+</html>

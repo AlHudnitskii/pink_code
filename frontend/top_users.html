@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Top Users</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #181818;
+            color: white;
+        }
+        .table-dark th, .table-dark td {
+            color: #fff;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <a class="navbar-brand" href="index.html">LeetCode Analogue</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Explore</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="problems.html">Problems</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="create_problem.html">Create problem</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Discuss</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="top_users.html">Top</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="profile.html">Profile</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container mt-4">
+        <div class="table-responsive">
+            <table class="table table-dark table-hover">
+                <thead>
+                    <tr>
+                        <th>Position</th>
+                        <th>Username</th>
+                        <th>Solved Problems</th>
+                    </tr>
+                </thead>
+                <tbody id="user-table-body">
+                </tbody>
+            </table>
+        </div>
+        <nav>
+            <ul class="pagination justify-content-center" id="pagination">
+            </ul>
+        </nav>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+        const apiUrl = 'http://localhost:8000/api/u/top-users/';
+        let currentPage = 1;
+        let pageSize = 10;
+        const token = localStorage.getItem('accessToken');
+
+        document.addEventListener('DOMContentLoaded', function () {
+            loadUsers(currentPage);
+
+            document.getElementById('pagination').addEventListener('click', function (e) {
+                if (e.target.tagName === 'A') {
+                    e.preventDefault();
+                    const page = parseInt(e.target.getAttribute('data-page'));
+                    if (!isNaN(page)) {
+                        currentPage = page;
+                        loadUsers(currentPage);
+                    }
+                }
+            });
+        });
+
+        function loadUsers(page) {
+            fetch(`${apiUrl}?page=${page}&page_size=${pageSize}`, {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            })
+                .then(response => response.json())
+                .then(data => {
+                    const tbody = document.getElementById('user-table-body');
+                    tbody.innerHTML = '';
+                    data.results.forEach(user => {
+                        const tr = document.createElement('tr');
+                        tr.innerHTML = `
+                            <td>${user.position}</td>
+                            <td>${user.username}</td>
+                            <td>${user.solved_problems}</td>
+                        `;
+                        tbody.appendChild(tr);
+                    });
+                    updatePagination(data);
+                })
+                .catch(error => console.error('Error fetching users:', error));
+        }
+
+        function updatePagination(data) {
+            const pagination = document.getElementById('pagination');
+            pagination.innerHTML = '';
+
+            if (data.previous) {
+                const prevPage = document.createElement('li');
+                prevPage.className = 'page-item';
+                prevPage.innerHTML = `<a class="page-link" href="#" data-page="${currentPage - 1}">Previous</a>`;
+                pagination.appendChild(prevPage);
+            }
+
+            for (let i = 1; i <= data.total_pages; i++) {
+                const pageItem = document.createElement('li');
+                pageItem.className = 'page-item' + (i === currentPage ? ' active' : '');
+                pageItem.innerHTML = `<a class="page-link" href="#" data-page="${i}">${i}</a>`;
+                pagination.appendChild(pageItem);
+            }
+
+            if (data.next) {
+                const nextPage = document.createElement('li');
+                nextPage.className = 'page-item';
+                nextPage.innerHTML = `<a class="page-link" href="#" data-page="${currentPage + 1}">Next</a>`;
+                pagination.appendChild(nextPage);
+            }
+        }
+    </script>
+</body>
+</html>

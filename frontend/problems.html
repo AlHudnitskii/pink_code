@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LeetCode Analogue</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #181818;
+            color: white;
+        }
+        .card {
+            background-color: #2a2a2a;
+            border: none;
+        }
+        .btn-custom {
+            background-color: #343a40;
+            color: white;
+        }
+        .btn-custom:hover {
+            background-color: #495057;
+        }
+        .nav-link {
+            color: white;
+        }
+        .nav-link:hover {
+            color: #ccc;
+        }
+        .table-dark th, .table-dark td {
+            color: #fff;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <a class="navbar-brand" href="index.html">LeetCode Analogue</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Explore</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="problems.html">Problems</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="create_problem.html">Create problem</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Discuss</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="top_users.html">Top</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="profile.html">Profile</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container mt-4">
+        <div class="row">
+            <!-- Left Column -->
+            <div class="col-lg-9">
+                <!-- Study Plan Cards -->
+                <div class="row mb-4">
+                    <div class="col-md-4">
+                        <div class="card">
+                            <img src="https://via.placeholder.com/300x150" class="card-img-top" alt="Top Interview 150">
+                            <div class="card-body">
+                                <h5 class="card-title">Top Interview 150</h5>
+                                <p class="card-text">Must-do list for Interview Prep</p>
+                                <a href="#" class="btn btn-custom">Start Learning</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card">
+                            <img src="https://via.placeholder.com/300x150" class="card-img-top" alt="LeetCode 75">
+                            <div class="card-body">
+                                <h5 class="card-title">LeetCode 75</h5>
+                                <p class="card-text">Ace Coding Interview in 75 Qs</p>
+                                <a href="#" class="btn btn-custom">Start Learning</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card">
+                            <img src="https://via.placeholder.com/300x150" class="card-img-top" alt="SQL 50">
+                            <div class="card-body">
+                                <h5 class="card-title">SQL 50</h5>
+                                <p class="card-text">Crack SQL Interview in 50 Qs</p>
+                                <a href="#" class="btn btn-custom">Start Learning</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Problem Table -->
+                <div class="table-responsive">
+                    <table class="table table-dark table-hover">
+                        <thead>
+                            <tr>
+                                <!-- <th>Status</th> -->
+                                <th>Title</th>
+                                <th>Type</th>
+                                <!-- <th>Acceptance</th> -->
+                                <th>Difficulty</th>
+                                <!-- <th>Frequency</th> -->
+                            </tr>
+                        </thead>
+                        <tbody id="problem-table-body">
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Right Column -->
+            <div class="col-lg-3">
+                <!-- Calendar -->
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <h5 class="card-title">Calendar</h5>
+                        <p>Widget for calendar</p>
+                    </div>
+                </div>
+
+                <!-- Trending Companies -->
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <h5 class="card-title">Trending Companies</h5>
+                        <p>Widget for trending companies</p>
+                    </div>
+                </div>
+
+                <!-- Session Stats -->
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <h5 class="card-title">Session Stats</h5>
+                        <p>Widget for session stats</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            fetch('http://localhost:8000/api/main/problems/')
+                .then(response => response.json())
+                .then(data => {
+                    const tbody = document.getElementById('problem-table-body');
+                    tbody.innerHTML = '';
+                    data.results.forEach(problem => {
+                        const tr = document.createElement('tr');
+                        tr.innerHTML = `
+                            <td class="clickable" onclick="redirectToProblem(${problem.id})">${problem.id}. ${problem.title}</td>
+                            <td class="clickable" onclick="redirectToProblem(${problem.id})">${problem.type}</td>
+                            <td class="clickable" onclick="redirectToProblem(${problem.id})">${problem.difficulty}</td>
+                        `;
+                        tbody.appendChild(tr);
+                    });
+                })
+                .catch(error => console.error('Error fetching problems:', error));
+        });
+
+        function redirectToProblem(id) {
+            window.location.href = `problem_details.html?id=${id}`;
+        }
+    </script>
+</body>
+</html>

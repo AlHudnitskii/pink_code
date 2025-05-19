@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Profile</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #181818;
+            color: white;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+        .navbar {
+            margin-bottom: 20px;
+        }
+        .sidebar {
+            background-color: #2a2a2a;
+            padding: 20px;
+            height: 100vh;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 250px;
+        }
+        .sidebar .profile-img {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            margin-bottom: 10px;
+        }
+        .content {
+            margin-left: 270px;
+            padding: 20px;
+        }
+        .card {
+            background-color: #2a2a2a;
+            border: none;
+            margin-bottom: 20px;
+        }
+        .card-header {
+            background-color: #343a40;
+            border-bottom: 1px solid #444;
+        }
+        .table-dark th, .table-dark td {
+            color: #fff;
+        }
+        .stat-item {
+            margin-bottom: 10px;
+        }
+        .stat-item span {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <a class="navbar-brand" href="index.html">LeetCode Analogue</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Explore</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="problems.html">Problems</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="create_problem.html">Create problem</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Discuss</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="top_users.html">Top</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="profile.html">Profile</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <h4 id="username">Username</h4>
+        <p id="rank">Rank: </p>
+        <h5>Languages</h5>
+        <div id="languages">
+            <span class="badge badge-secondary">Python3</span> int problems solved
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="content">
+        <div class="card">
+            <div class="card-header">
+                <h2>Profile Overview</h2>
+            </div>
+            <div class="card-body">
+                <h4>Completed Problems: <span id="was_complited_problems"></span></h4>
+                <h6>Solved Problems:</h6>
+                <div class="table-responsive">
+                    <table class="table table-dark table-hover">
+                        <thead>
+                            <tr>
+                                <th>Problem</th>
+                                <th>Language</th>
+                                <th>Passed</th>
+                                <th>Submitted At</th>
+                            </tr>
+                        </thead>
+                        <tbody id="solved_problems_table">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+        const token = localStorage.getItem('accessToken');
+        if (!token) {
+            alert("You are not logged in. Please log in first.");
+            window.location.href = "login.html";
+        }
+
+        fetch('http://localhost:8000/api/u/profile/', {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            document.getElementById('username').innerText = data.username;
+            document.getElementById('rank').innerText = `Rank: ${data.rank}`;
+            document.getElementById('was_complited_problems').innerText = data.was_complited_problems;
+
+            const solvedProblemsTable = document.getElementById('solved_problems_table');
+            solvedProblemsTable.innerHTML = '';
+            data.solved_problems.forEach(problem => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td><a href="solution.html?id=${problem.id}" class="text-white">${problem.problem.id}. ${problem.problem.title}</a></td>
+                    <td>Python</td>
+                    <td>${problem.passed ? 'Yes' : 'No'}</td>
+                    <td>${new Date(problem.executed_at).toLocaleDateString()}</td>
+                `;
+                solvedProblemsTable.appendChild(row);
+            });
+        })
+        .catch(error => {
+            console.error('Error fetching user profile:', error);
+        });
+    </script>
+</body>
+</html>
+

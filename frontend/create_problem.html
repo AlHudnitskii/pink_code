@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Problem</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #181818;
+            color: white;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+        .navbar {
+            margin-bottom: 20px;
+        }
+        .sidebar {
+            background-color: #2a2a2a;
+            padding: 20px;
+            height: 100vh;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 250px;
+        }
+        .content {
+            margin-left: 270px;
+            padding: 20px;
+        }
+        .card {
+            background-color: #2a2a2a;
+            border: none;
+            margin-bottom: 20px;
+        }
+        .card-header {
+            background-color: #343a40;
+            border-bottom: 1px solid #444;
+        }
+        .form-control, .btn {
+            background-color: #343a40;
+            color: white;
+            border: 1px solid #444;
+        }
+        .form-control:focus, .btn:focus {
+            background-color: #495057;
+            border: 1px solid #555;
+            color: white;
+        }
+        .nav-link {
+            color: white;
+        }
+        .nav-link:hover {
+            color: #ccc;
+        }
+        .form-group label {
+            color: #ccc;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <a class="navbar-brand" href="index.html">LeetCode Analogue</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav">
+                <li class="nav-item active">
+                    <a class="nav-link" href="#">Explore <span class="sr-only">(current)</span></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="problems.html">Problems</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="create_problem.html">Create problem</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Discuss</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="top_users.html">Top</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="profile.html">Profile</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <h4>Have you txt file with testcases?</h4>
+        <ul class="nav flex-column">
+            <li class="nav-item">
+                <a class="nav-link" href="load_testcases.html">Load Testcases</a>
+            </li> 
+            <li class="nav-item">
+                <a class="nav-link" href="create_testcase.html">Create testcase</a>
+            </li>
+        </ul>
+    </div>
+
+    <!-- Main Content -->
+    <div class="content">
+        <div class="card">
+            <div class="card-header">
+                <h2>Create a New Problem</h2>
+            </div>
+            <div class="card-body">
+                <form id="createProblemForm">
+                    <div class="form-group">
+                        <label for="difficulty">Type</label>
+                        <select class="form-control" id="type" required>
+                            <option value="Algorithm">Algorithm</option>
+                            <option value="SQL">SQL</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="title">Title</label>
+                        <input type="text" class="form-control" id="title" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="subtitle">Subtitle</label>
+                        <input type="text" class="form-control" id="subtitle" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="description">Description</label>
+                        <textarea class="form-control" id="description" rows="5" required></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="description">First line</label>
+                        <input class="form-control" id="firstLine" placeholder="def smth(args):" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="difficulty">Difficulty</label>
+                        <select class="form-control" id="difficulty" required>
+                            <option value="Easy">Easy</option>
+                            <option value="Medium">Medium</option>
+                            <option value="Hard">Hard</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Create Problem</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+        const token = localStorage.getItem('accessToken');
+        if (!token) {
+            alert("You are not logged in. Please log in first.");
+            window.location.href = "login.html";
+        }
+
+        document.getElementById('createProblemForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            const type = document.getElementById('type').value;
+            const title = document.getElementById('title').value;
+            const subtitle = document.getElementById('subtitle').value;
+            const description = document.getElementById('description').value;
+            const firstLine = document.getElementById('firstLine').value;
+            const difficulty = document.getElementById('difficulty').value;
+
+            const problemData = {
+                type: type,
+                title: title,
+                subtitle: subtitle,
+                description: description,
+                fst_line: firstLine,
+                difficulty: difficulty
+            };
+
+            fetch('http://localhost:8000/api/main/problem/', {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
+                },
+                body: JSON.stringify(problemData)
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.id) {
+                    alert("Problem created successfully.");
+                    window.location.href = `problem_details.html?id=${data.id}`;
+                } else {
+                    alert("Error creating problem: " + JSON.stringify(data));
+                }
+            })
+            .catch(error => {
+                console.error('Error creating problem:', error);
+                alert('Error creating problem. Check console for details.');
+            });
+        });
+    </script>
+</body>
+</html>

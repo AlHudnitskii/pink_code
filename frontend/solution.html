@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Solution Detail</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f8f9fa;
+            color: #212529;
+        }
+        .navbar {
+            margin-bottom: 20px;
+        }
+        .card {
+            background-color: #ffffff;
+            border: none;
+            margin-top: 20px;
+        }
+        .card-header {
+            background-color: #343a40;
+            border-bottom: 1px solid #444;
+            color: white;
+        }
+        .btn-custom {
+            background-color: #343a40;
+            color: white;
+        }
+        .btn-custom:hover {
+            background-color: #495057;
+        }
+        .nav-link {
+            color: white;
+        }
+        .nav-link:hover {
+            color: #ccc;
+        }
+        .chart {
+            margin-top: 20px;
+        }
+        .code-container {
+            background-color: #272822;
+            color: #f8f8f2;
+            padding: 20px;
+            border-radius: 5px;
+            font-family: monospace;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <a class="navbar-brand" href="index.html">LeetCode Analogue</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Explore</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="problems.html">Problems</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="create_problem.html">Create problem</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Discuss</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="top_users.html">Top</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="profile.html">Profile</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Solution Detail Content -->
+    <div class="container">
+        <div class="card">
+            <div class="card-header">
+                <h2 id="problem-title">Problem Title</h2>
+                <span id="submission-status" class="badge badge-success">Accepted</span>
+                <span id="submission-time" class="ml-3">Submitted: </span>
+            </div>
+            <div class="card-body">
+                <h4>Test cases passed: <span id="test-cases-passed"></span></h4>
+                <h5>Runtime: <span id="runtime"></span> ms</h5>
+                <h5>Memory Usage: <span id="memory"></span> MB</h5>
+                <div class="code-container mt-4">
+                    <h5>Submitted Code:</h5>
+                    <pre id="submitted-code" style="color: white;"></pre>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+    <script>
+        const token = localStorage.getItem('accessToken');
+        if (!token) {
+            alert("You are not logged in. Please log in first.");
+            window.location.href = "login.html"; // Redirect to login page
+        }
+        const urlParams = new URLSearchParams(window.location.search);
+        const solutionId = urlParams.get('id');
+
+        fetch(`http://localhost:8000/api/u/solution/${solutionId}/`, {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            document.getElementById('problem-title').innerText = data.problem.title;
+            document.getElementById('submission-status').innerText = data.passed ? 'Accepted' : 'Rejected';
+            document.getElementById('submission-status').className = data.passed ? 'badge badge-success' : 'badge badge-danger';
+            document.getElementById('submission-time').innerText = `Submitted: ${new Date(data.executed_at).toLocaleString()}`;
+            document.getElementById('test-cases-passed').innerText = data.test_cases_passed;
+            document.getElementById('runtime').innerText = data.lead_time;
+            document.getElementById('memory').innerText = data.memory_used;
+            document.getElementById('submitted-code').innerText = data.user_code;
+
+        })
+        .catch(error => {
+            console.error('Error fetching solution detail:', error);
+        });
+    </script>
+</body>
+</html>

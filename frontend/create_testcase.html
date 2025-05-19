@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Test Case</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #181818;
+            color: white;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+        .navbar {
+            margin-bottom: 20px;
+        }
+        .content {
+            padding: 20px;
+        }
+        .card {
+            background-color: #2a2a2a;
+            border: none;
+            margin-bottom: 20px;
+        }
+        .card-header {
+            background-color: #343a40;
+            border-bottom: 1px solid #444;
+        }
+        .form-control, .btn {
+            background-color: #343a40;
+            color: white;
+            border: 1px solid #444;
+        }
+        .form-control:focus, .btn:focus {
+            background-color: #495057;
+            border: 1px solid #555;
+            color: white;
+        }
+        .nav-link {
+            color: white;
+        }
+        .nav-link:hover {
+            color: #ccc;
+        }
+        .form-group label {
+            color: #ccc;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <a class="navbar-brand" href="index.html">LeetCode Analogue</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav">
+                <li class="nav-item active">
+                    <a class="nav-link" href="#">Explore <span class="sr-only">(current)</span></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="problems.html">Problems</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="create_problem.html">Create problem</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Discuss</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="top_users.html">Top</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="profile.html">Profile</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="content">
+        <div class="card">
+            <div class="card-header">
+                <h2>Create a New Test Case</h2>
+            </div>
+            <div class="card-body">
+                <form id="createTestCaseForm">
+                    <div class="form-group">
+                        <label for="problemId">Problem ID</label>
+                        <input type="number" class="form-control" id="problemId" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="inputData">Input Data</label>
+                        <input type="text" class="form-control" id="inputData" placeholder="[1,2,3];2" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="expectedOutput">Expected Output</label>
+                        <input type="text" class="form-control" id="expectedOutput" placeholder="[1,3]" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Create Test Case</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+        const token = localStorage.getItem('accessToken');
+        if (!token) {
+            alert("You are not logged in. Please log in first.");
+            window.location.href = "login.html";
+        }
+
+        document.getElementById('createTestCaseForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            const problemId = document.getElementById('problemId').value;
+            const inputData = document.getElementById('inputData').value;
+            const expectedOutput = document.getElementById('expectedOutput').value;
+            const testCaseData = {
+                problem: problemId,
+                input_data: inputData,
+                expected_output: expectedOutput
+            };
+
+            fetch(`http://localhost:8000/api/main/problem/${problemId}/testcase/`, {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
+                },
+                body: JSON.stringify(testCaseData)
+            })
+            .then(response => {
+                if (!response.ok) {
+                    return response.json().then(errorData => {
+                        throw new Error(JSON.stringify(errorData));
+                    });
+                }
+                return response.json();
+            })
+            .then(data => {
+                alert("Test case created successfully.");
+                window.location.href = `problem_details.html?id=${data.problem}`;
+            })
+            .catch(error => {
+                console.error('Error creating test case:', error);
+                alert('Error creating test case: ' + error.message);
+            });
+        });
+    </script>
+</body>
+</html>

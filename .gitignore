@@ -1,0 +1,8 @@
+__pycache__/
+.vscode/
+db.*
+venv/
+dusersb*
+celerybeat-schedule
+.env
+venv/
