@@ -1,16 +1,3 @@
-// Пример вызова функции login
-// login('user@example.com', 'password')
-//     .then(() => console.log('Login successful'))
-//     .catch(err => console.error(err));
-
-
-
-// Пример вызова функции login
-// login('user@example.com', 'password')
-//     .then(() => console.log('Login successful'))
-//     .catch(err => console.error(err));
-
-
 async function logout() {
     const refreshToken = localStorage.getItem('refreshToken');
     if (!refreshToken) {
@@ -35,6 +22,3 @@ async function logout() {
         console.error('Logout failed');
     }
 }
-    
-    // Пример вызова функции logout
-    // logout();
