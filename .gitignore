@@ -6,3 +6,6 @@ dusersb*
 celerybeat-schedule
 .env
 venv/
+.pylintrc/
+migrations/
+ficture.json
