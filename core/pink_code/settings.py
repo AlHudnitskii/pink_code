@@ -152,7 +152,7 @@ DATABASES = {
         'USER': 'pink_code',
         'PASSWORD': 'pink_code',
         'HOST': 'db', 
-        'PORT': 5432,
+        'PORT': '5432',
     }
 }
 

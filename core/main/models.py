@@ -3,15 +3,8 @@ from django.db import models
 from core.auth_.models import User
 
 class Problem(models.Model):
-    DIFFICULTY_CHOICES = [
-        ("Easy", "Easy"),
-        ("Medium", "Medium"),
-        ("Hard", "Hard"),
-    ]
-    TYPE_CHOICES = [
-        ("Algorithm", "Algorithm"),
-        ("SQL", "SQL"),
-    ]
+    DIFFICULTY_CHOICES = [ ("Easy", "Easy"), ("Medium", "Medium"), ("Hard", "Hard"), ]
+    TYPE_CHOICES = [ ("Algorithm", "Algorithm"), ("SQL", "SQL"), ]
     author = models.ForeignKey(to=User, on_delete=models.CASCADE, related_name="user_problems")
     title = models.CharField(max_length=50)
     type = models.CharField(max_length=20, choices=TYPE_CHOICES, default="Algorithm")
@@ -54,10 +47,7 @@ class SolutionResult(models.Model):
 class Rate(models.Model):
     LIKE = 'like'
     DISLIKE = 'dislike'
-    RATE_CHOICES = [
-        (LIKE, 'Like'),
-        (DISLIKE, 'Dislike'),
-    ]
+    RATE_CHOICES = [ (LIKE, 'Like'), (DISLIKE, 'Dislike'), ]
 
     problem = models.ForeignKey(to=Problem, related_name="rates", on_delete=models.CASCADE)
     user = models.ForeignKey(to=User, on_delete=models.CASCADE)

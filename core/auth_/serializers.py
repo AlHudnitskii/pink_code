@@ -1,18 +1,15 @@
-
 from rest_framework import serializers
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework.exceptions import ValidationError
-
 from core.auth_.models import User
 from core.auth_.validators import validate_password
+
 
 class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
     @classmethod
     def get_token(cls, user):
         token = super().get_token(user)
-
         token['username'] = user.username
-
         return token
 
 class UserCreateSerializer(serializers.ModelSerializer):

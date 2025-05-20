@@ -1,14 +1,6 @@
 from django.urls import path
-from .views import (
-    DislikeProblemView,
-    LikeProblemView,
-    ProblemListView,
-    ProblemRetrieveUpdateDestroyView,
-    ProblemCreateView,
-    TestCaseView,
-    TestCasesListView,
-    LoadTestCasesView,
-)
+from .views import DislikeProblemView, LikeProblemView, ProblemListView, ProblemRetrieveUpdateDestroyView,\
+    ProblemCreateView, TestCaseView, TestCasesListView, LoadTestCasesView
 
 app_name = "main"
 

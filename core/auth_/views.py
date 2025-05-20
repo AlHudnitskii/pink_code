@@ -10,9 +10,6 @@ from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework_simplejwt.exceptions import InvalidToken
 from rest_framework_simplejwt.token_blacklist.models import BlacklistedToken
 
-from drf_yasg.utils import swagger_auto_schema
-from drf_yasg import openapi
-
 from core.auth_.models import User
 from core.auth_.permissions import CustomIsAuthenticatedPermission
 from core.auth_.serializers import UserCreateSerializer
@@ -45,45 +42,13 @@ class MyTokenObtaionPairView(TokenObtainPairView):
     
 
 class RegisterView(APIView):
-    @swagger_auto_schema(
-        request_body=openapi.Schema(
-            type=openapi.TYPE_OBJECT,
-            properties={
-                'username': openapi.Schema(type=openapi.TYPE_STRING, example='string'),
-                'email': openapi.Schema(type=openapi.TYPE_STRING, example='email@example.com'),
-                'password': openapi.Schema(type=openapi.TYPE_STRING, example='string'),
-            },
-            required=['username', 'email', 'password']
-        ),
-        responses={201: UserCreateSerializer, 400: 'Bad Request'}
-    )
     def post(self, request):
-        # email = "@mail.ru"
-        # password = "qwertyuiop2014"
-        # for i in range(100):
-        #     username = "test" + str(i)
-        #     user = User(
-        #         username=f"{username}", email=f"{username}{email}", password=password
-        #     )
-        #     user.save()
-        #     user.set_password(user.password)
         serializer = UserCreateSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         serializer.save()
         return Response(serializer.data)
     
 class LoginView(APIView):
-    @swagger_auto_schema(
-        request_body=openapi.Schema(
-            type=openapi.TYPE_OBJECT,
-            properties={
-                'username_or_email': openapi.Schema(type=openapi.TYPE_STRING, example='string'),
-                'password': openapi.Schema(type=openapi.TYPE_STRING, example='string'),
-            },
-            required=['password', 'username_or_email']
-        ),
-        responses={201: UserCreateSerializer, 400: 'Bad Request'}
-    )
     def post(self, request):
         username_or_email = request.data.get("username_or_email")
         password = request.data.get("password")
@@ -112,24 +77,7 @@ class LoginView(APIView):
 
 
 class LogoutView(APIView):
-    """
-    Url for logout users
-    """
     permission_classes = [CustomIsAuthenticatedPermission]
-
-    @swagger_auto_schema(
-        manual_parameters=[
-            openapi.Parameter('Authorization', openapi.IN_HEADER, description="Bearer token", type=openapi.TYPE_STRING, required=True),
-        ],
-        request_body=openapi.Schema(
-            type=openapi.TYPE_OBJECT,
-            properties={
-                'refresh': openapi.Schema(type=openapi.TYPE_STRING, example='string'),
-            },
-            required=['refresh']
-        ),
-        responses={205: "You have successfully logged out", 400: 'Bad Request'}
-    )
     def post(self, request):
         try:
             refresh_token = request.data["refresh"]

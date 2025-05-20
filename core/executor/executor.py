@@ -1,11 +1,10 @@
 import sys
-#import json
+import json
+#import custom_json_serializer
 import importlib.util
 import os
 import datetime
 import logging
-
-from . import custom_json_serializer
 
 
 logging.basicConfig(level=logging.INFO)
@@ -30,13 +29,13 @@ def run_user_code(user_id: str, user_code: str, test_cases: str):
     function_name = user_code.split("def ")[1].split("(")[0].strip()
     function = getattr(user_module, function_name)
 
-    test_cases = custom_json_serializer.deserialize(test_cases)
+    #test_cases = custom_json_serializer.deserialize(test_cases)
     
-    # try:
-    #     test_cases = json.loads(test_cases)
-    # except json.JSONDecodeError as e:
-    #     os.remove(filename)
-    #     return {'error': str(e)}
+    try:
+        test_cases = json.loads(test_cases)
+    except json.JSONDecodeError as e:
+        os.remove(filename)
+        return {'error': str(e)}
 
     max_lead_time = 0
     for i, case in enumerate(test_cases):
@@ -45,27 +44,27 @@ def run_user_code(user_id: str, user_code: str, test_cases: str):
         expected_output = case['fields']['expected_output']
         args = None
         
-        input_data = custom_json_serializer.deserialize(input_data)
-        expected_output = custom_json_serializer.deserialize(expected_output)
+        # input_data = custom_json_serializer.deserialize(input_data)
+        # expected_output = custom_json_serializer.deserialize(expected_output)
 
-        # try:
-        #     input_data = json.loads(input_data)
-        # except json.JSONDecodeError:
-        #     pass
-        # try:
-        #     expected_output = json.loads(expected_output)
-        # except json.JSONDecodeError:
-        #     pass
+        try:
+            input_data = json.loads(input_data)
+        except json.JSONDecodeError:
+            pass
+        try:
+            expected_output = json.loads(expected_output)
+        except json.JSONDecodeError:
+            pass
         if isinstance(input_data, str):    
             if ";" in input_data:
                 args = []
                 list_args = input_data.split(";")
                 for arg in list_args:                   
-                    args.append(custom_json_serializer.deserialize(arg))
-                    # try:
-                    #     args.append(json.loads(arg))
-                    # except json.JSONDecodeError:
-                    #     args.append(arg)
+                    #args.append(custom_json_serializer.deserialize(arg))
+                    try:
+                        args.append(json.loads(arg))
+                    except json.JSONDecodeError:
+                        args.append(arg)
         try:
             if args:
                 result = function(*args)
@@ -91,13 +90,13 @@ def run_user_code(user_id: str, user_code: str, test_cases: str):
 
         if not passed:
             os.remove(filename)
-            return custom_json_serializer.serialize(result)
-            #return json.dumps(result)
+            #return custom_json_serializer.serialize(result)
+            return json.dumps(result)
 
     # memory_used = memory_usage()
     os.remove(filename)
-    return custom_json_serializer.serialize(result)
-    #return json.dumps(result)
+    #return custom_json_serializer.serialize(result)
+    return json.dumps(result)
 
 if __name__ == "__main__":
     if len(sys.argv) < 4:

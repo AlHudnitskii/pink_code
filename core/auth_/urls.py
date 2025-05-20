@@ -1,13 +1,7 @@
 from django.urls import path
-
-from .views import (
-    MyTokenObtaionPairView,
-    RegisterView,
-    LogoutView,
-    LoginView,
-)
-
 from rest_framework_simplejwt.views import TokenRefreshView
+
+from .views import MyTokenObtaionPairView, RegisterView, LogoutView, LoginView
 
 
 app_name = "auth_"

@@ -18,18 +18,10 @@ from core.utils import CustomPagination
 
 
 class ProblemListView(generics.ListAPIView):
-    """
-    List all problems
-    """
     queryset = Problem.objects.all()
     serializer_class = ProblemSerializer
     pagination_class = CustomPagination
-    # permission_classes = [CustomIsAuthenticatedPermission]
-
-    # @swagger_auto_schema(
-    #     operation_description="Get a list of all problems",
-    #     responses={200: ProblemSerializer(many=True)}
-    # )
+ 
     def get_quryset(self):
         cache_key = "all_problems"
         cached_data = cache.get(cache_key)
@@ -43,71 +35,26 @@ class ProblemListView(generics.ListAPIView):
 
 
 class ProblemRetrieveUpdateDestroyView(generics.RetrieveUpdateDestroyAPIView):
-    """
-    Retrieve, update or delete a problem instance
-    """
     permission_classes = [CustomIsAuthenticatedPermission]
     queryset = Problem.objects.all()
     serializer_class = ProblemSerializer
     lookup_field = "id"
 
-    @swagger_auto_schema(
-        manual_parameters=[
-            openapi.Parameter('Authorization', openapi.IN_HEADER, description="Bearer token", type=openapi.TYPE_STRING, required=True),
-        ],
-        operation_description="Retrieve a problem by ID",
-        responses={200: ProblemSerializer()}
-    )
     def get(self, request, *args, **kwargs):
         return super().get(request, *args, **kwargs)
 
-    @swagger_auto_schema(
-        manual_parameters=[
-            openapi.Parameter('Authorization', openapi.IN_HEADER, description="Bearer token", type=openapi.TYPE_STRING, required=True),
-        ],
-        operation_description="Update a problem by ID",
-        request_body=ProblemSerializer,
-        responses={200: ProblemSerializer()}
-    )
     def put(self, request, *args, **kwargs):
         return super().put(request, *args, **kwargs)
 
-    @swagger_auto_schema(
-        manual_parameters=[
-            openapi.Parameter('Authorization', openapi.IN_HEADER, description="Bearer token", type=openapi.TYPE_STRING, required=True),
-        ],
-        operation_description="Partial update a problem by ID",
-        request_body=ProblemSerializer,
-        responses={200: ProblemSerializer()}
-    )
     def patch(self, request, *args, **kwargs):
         return super().patch(request, *args, **kwargs)
 
-    @swagger_auto_schema(
-        manual_parameters=[
-            openapi.Parameter('Authorization', openapi.IN_HEADER, description="Bearer token", type=openapi.TYPE_STRING, required=True),
-        ],
-        operation_description="Delete a problem by ID",
-        responses={204: 'No Content'}
-    )
     def delete(self, request, *args, **kwargs):
         return super().delete(request, *args, **kwargs)
 
 
 class ProblemCreateView(APIView):
-    """
-    Create a new problem
-    """
     permission_classes = [CustomIsAdminPermission]
-
-    @swagger_auto_schema(
-        manual_parameters=[
-            openapi.Parameter('Authorization', openapi.IN_HEADER, description="Bearer token", type=openapi.TYPE_STRING, required=True),
-        ],
-        operation_description="Create a new problem",
-        request_body=ProblemSerializer,
-        responses={201: ProblemSerializer()}
-    )
     def post(self, request, *args, **kwargs):
         request.data["author"] = request.user.id
         serializer = ProblemSerializer(data=request.data)
@@ -116,19 +63,7 @@ class ProblemCreateView(APIView):
         return Response(serializer.data)
     
 class TestCaseView(APIView):
-    """
-    Create testcase
-    """
     permission_classes = [CustomIsAdminPermission]
-
-    @swagger_auto_schema(
-        manual_parameters=[
-            openapi.Parameter('Authorization', openapi.IN_HEADER, description="Bearer token", type=openapi.TYPE_STRING, required=True),
-        ],
-        operation_description="Create a new test case",
-        request_body=TestCaseSerializer,
-        responses={201: TestCaseSerializer()}
-    )
     def post(self, request, *args, **kwargs):
         problem_id = request.data.get('problem')
         user = self.request.user
@@ -145,20 +80,8 @@ class TestCaseView(APIView):
         return Response(serializer.data)
 
 class TestCasesListView(generics.ListAPIView):
-    """
-    Get testcases of problem by id
-    """
     permission_classes = [CustomIsAuthenticatedPermission]
     serializer_class = TestCaseSerializer
-
-    @swagger_auto_schema(
-        manual_parameters=[
-            openapi.Parameter('Authorization', openapi.IN_HEADER, description="Bearer token", type=openapi.TYPE_STRING, required=True),
-            openapi.Parameter('not_full', openapi.IN_QUERY, description="Not full list with 3 obj full list", type=openapi.TYPE_BOOLEAN),
-        ],
-        operation_description="Get a list of test cases for a specific problem",
-        responses={200: TestCaseSerializer(many=True)}
-    )
     def get(self, request, *args, **kwargs):
         id_problem = self.kwargs["id"]
         not_full = request.query_params.get("not_full")
@@ -174,24 +97,7 @@ class TestCasesListView(generics.ListAPIView):
     
 
 class LikeProblemView(APIView):
-    """
-    Url for liking problems
-    """
     permission_classes = [CustomIsAuthenticatedPermission]
-
-    @swagger_auto_schema(
-        manual_parameters=[
-            openapi.Parameter('Authorization', openapi.IN_HEADER, description="Bearer token", type=openapi.TYPE_STRING, required=True),
-        ],
-        operation_description="Like a problem",
-        responses={
-            200: "OK",
-            201: "Created",
-            205: "Reset Content",
-            404: "Not Found",
-            400: "Bad Request",
-        }
-    )
     def post(self, request, problem_id, user_id):
         try:
             problem = Problem.objects.get(pk=problem_id)
@@ -216,24 +122,7 @@ class LikeProblemView(APIView):
 
 
 class DislikeProblemView(APIView):
-    """
-    Url for disliking problems
-    """
     permission_classes = [CustomIsAuthenticatedPermission]
-
-    @swagger_auto_schema(
-        manual_parameters=[
-            openapi.Parameter('Authorization', openapi.IN_HEADER, description="Bearer token", type=openapi.TYPE_STRING, required=True),
-        ],
-        operation_description="Dislike a problem",
-        responses={
-            200: "OK",
-            201: "Created",
-            205: "Reset Content",
-            404: "Not Found",
-            400: "Bad Request",
-        }
-    )
     def post(self, request, problem_id, user_id):
         try:
             problem = Problem.objects.get(pk=problem_id)
@@ -259,14 +148,6 @@ class DislikeProblemView(APIView):
 class LoadTestCasesView(APIView):
     parser_classes = [MultiPartParser, FormParser]
     permission_classes = [CustomIsAdminPermission]
-
-
-    @swagger_auto_schema(
-        manual_parameters=[
-            openapi.Parameter('Authorization', openapi.IN_HEADER, description="Bearer token", type=openapi.TYPE_STRING, required=True),
-            openapi.Parameter('file', openapi.IN_FORM, description="File with testcases", type=openapi.TYPE_FILE, required=True),
-        ],
-    )
     def post(self, request, *args, **kwargs):
         problem_id = kwargs.get("id")
         user = self.request.user

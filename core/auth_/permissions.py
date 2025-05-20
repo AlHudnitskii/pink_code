@@ -30,7 +30,6 @@ class CustomIsAuthenticatedPermission(BasePermission):
     
 class CustomIsAdminPermission(CustomIsAuthenticatedPermission):
     def has_permission(self, request, view):
-        has_permission = super().has_permission(request, view)
-        if has_permission and request.user.is_staff:
+        if super().has_permission(request, view) and request.user.is_staff:
             return True
         return False

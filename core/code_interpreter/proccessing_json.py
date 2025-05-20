@@ -1,5 +1,6 @@
 import ast
 
+
 def proccess_result(result: str):
     try:
         user_code = result[result.index("def"):result.index('[{\"')]
@@ -10,4 +11,3 @@ def proccess_result(result: str):
         return result_dict
     except (ValueError, SyntaxError) as e:
         return None
-
