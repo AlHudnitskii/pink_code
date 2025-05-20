@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Solution Detail</title>
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="styles/hidden.css">
+    <link rel="stylesheet" href="styles/base.css">
 </head>
 <body>
     <nav class="navbar navbar-expand-lg navbar-light bg-light sticky-top">
@@ -68,7 +68,7 @@
         const token = localStorage.getItem('accessToken');
         if (!token) {
             alert("You are not logged in. Please log in first.");
-            window.location.href = "login.html"; // Redirect to login page
+            window.location.href = "login.html";
         }
         const urlParams = new URLSearchParams(window.location.search);
         const solutionId = urlParams.get('id');
