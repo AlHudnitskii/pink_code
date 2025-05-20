@@ -30,8 +30,6 @@ document.getElementById('uploadForm').addEventListener('submit', function(event)
          const resultDiv = document.getElementById('uploadResult');
          if (data.error) {
             resultDiv.innerHTML = `<div class="alert alert-danger">${data.error}</div>`;
-         } else {
-            resultDiv.innerHTML = `<div class="alert alert-success">Test cases uploaded successfully.</div>`;
          }
    })
    .catch(error => {
