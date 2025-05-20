@@ -40,7 +40,6 @@
         </div>
     </nav>
 
-    <!-- Sidebar -->
     <div class="sidebar">
         <h4>Have you txt file with testcases?</h4>
         <ul class="nav flex-column">
@@ -53,8 +52,7 @@
         </ul>
     </div>
 
-    <!-- Main Content -->
-    <div class="content">
+   <div class="content">
         <div class="card">
             <div class="card-header">
                 <h2>Create a New Problem</h2>
@@ -101,55 +99,6 @@
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-    <script>
-        const token = localStorage.getItem('accessToken');
-        if (!token) {
-            alert("You are not logged in. Please log in first.");
-            window.location.href = "login.html";
-        }
-
-        document.getElementById('createProblemForm').addEventListener('submit', function(event) {
-            event.preventDefault();
-
-            const type = document.getElementById('type').value;
-            const title = document.getElementById('title').value;
-            const subtitle = document.getElementById('subtitle').value;
-            const description = document.getElementById('description').value;
-            const firstLine = document.getElementById('firstLine').value;
-            const difficulty = document.getElementById('difficulty').value;
-
-            const problemData = {
-                type: type,
-                title: title,
-                subtitle: subtitle,
-                description: description,
-                fst_line: firstLine,
-                difficulty: difficulty
-            };
-
-            fetch('http://localhost:8000/api/main/problem/', {
-                method: 'POST',
-                headers: {
-                    'Authorization': `Bearer ${token}`,
-                    'Content-Type': 'application/json',
-                    'Accept': 'application/json'
-                },
-                body: JSON.stringify(problemData)
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.id) {
-                    alert("Problem created successfully.");
-                    window.location.href = `problem_details.html?id=${data.id}`;
-                } else {
-                    alert("Error creating problem: " + JSON.stringify(data));
-                }
-            })
-            .catch(error => {
-                console.error('Error creating problem:', error);
-                alert('Error creating problem. Check console for details.');
-            });
-        });
-    </script>
+    <script src="scripts/create_problem.js"></script>    
 </body>
 </html>
