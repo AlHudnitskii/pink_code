@@ -1,0 +1,206 @@
+body {
+    background-color: #121212;
+    color: #ff4081;
+    font-family: sans-serif;
+    margin: 0;
+    padding-top: 60px; 
+    box-sizing: border-box;
+    display: flex; 
+    justify-content: center; 
+    align-items: flex-start; 
+    min-height: 100vh;
+    padding: 20px; 
+    gap: 20px; 
+    flex-wrap: wrap;
+}
+
+.navbar {
+    background-color: #1e1e1e !important;
+    border-bottom: 1px solid #ff4081;
+    padding: 10px 20px;
+    width: 100%;
+    box-sizing: border-box;
+    position: fixed;
+    top: 0;
+    z-index: 100;
+}
+
+.navbar-brand {
+    color: #ff4081 !important;
+    font-size: 1.5em;
+    font-weight: bold;
+}
+
+.navbar-toggler {
+    border: none !important;
+    background-color: transparent !important;
+    padding: 0.25rem 0.75rem;
+}
+
+.navbar-toggler:focus {
+    outline: none !important;
+    box-shadow: none !important;
+}
+
+.navbar-toggler-icon {
+    background-image: url("data:image/svg+xml,%3csvg viewBox='0 0 30 30' xmlns='http://www.w3.org/2000/svg'%3e%3cpath stroke='rgba(255,64,129,0.7)' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e") !important;
+}
+
+.navbar-nav .nav-item {
+    margin-left: 15px;
+}
+
+.navbar-nav .nav-link {
+    color: #eee !important;
+    transition: color 0.3s ease;
+}
+
+.navbar-nav .nav-link:hover {
+    color: #ff4081 !important;
+}
+
+.navbar-nav.ml-auto .nav-item {
+    margin-left: 0;
+    margin-right: 15px;
+}
+
+.sidebar {
+    background-color: #2c2c2c;
+    color: #eee;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    border: 1px solid #444;
+    padding: 20px;
+    margin-top: 100px; 
+    margin-bottom: 20px;
+    width: 300px; 
+    flex-shrink: 0; 
+}
+
+.sidebar h4 {
+    color: #ff4081;
+    margin-top: 0;
+    margin-bottom: 15px;
+    text-align: center;
+}
+
+.sidebar .nav-link {
+    color: #eee;
+    padding: 10px 15px;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+    margin-bottom: 8px;
+    display: block;
+    text-decoration: none;
+}
+
+.sidebar .nav-link:hover {
+    background-color: #444;
+    color: #ff4081;
+}
+
+.content {
+    background-color: #2c2c2c;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    border: 1px solid #444;
+    padding: 20px;
+    margin-top: 100px; 
+    margin-bottom: 20px;
+    flex-grow: 1;
+    min-width: 300px; 
+}
+
+.card-header {
+    padding: 20px;
+    border-bottom: 1px solid #444;
+}
+
+.card-header h2 {
+    color: #ff4081;
+    text-align: center;
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
+.card-body {
+    padding: 20px;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+label {
+    display: block;
+    color: #eee;
+    margin-bottom: 8px;
+}
+
+.form-control {
+    background-color: #444;
+    color: #eee;
+    border: 1px solid #555;
+    border-radius: 5px;
+    padding: 8px;
+    width: 100%;
+    box-sizing: border-box;
+    font-size: 1em;
+    background-image: url('data:image/svg+xml;utf8,<svg fill="%23eee" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/><path d="M0 0h24v24H0z" fill="none"/></svg>');
+    background-repeat: no-repeat;
+    background-position-x: 98%;
+    background-position-y: 50%;
+    padding-right: 2em;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+}
+
+.form-control::-ms-expand {
+    display: none;
+}
+
+.form-control:focus {
+    outline: none;
+    border-color: #ff4081;
+    box-shadow: 0 0 5px rgba(255, 64, 129, 0.5);
+}
+
+.btn-primary {
+    background-color: #ff4081 !important;
+    border-color: #ff4081 !important;
+    color: #000 !important;
+    padding: 15px 30px;
+    font-size: 1.1em;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    width: 100%;
+    box-sizing: border-box;
+    margin-top: 20px;
+}
+
+.btn-primary:hover {
+    background-color: #e63877 !important;
+    border-color: #e63877 !important;
+}
+
+.nav.flex-column {
+    padding: 0;
+    list-style: none;
+}
+
+@media (max-width: 768px) {
+    body {
+        flex-direction: column;
+        align-items: center;
+    }
+    .sidebar {
+        width: 80%;
+        margin-right: 0;
+        margin-bottom: 20px;
+    }
+    .content {
+        width: 80%;
+    }
+}

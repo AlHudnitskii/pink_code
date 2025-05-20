@@ -3,6 +3,8 @@ services:
     image: redis:latest
     ports:
       - "6380:6379"
+    networks:
+      leetcode_network:
 
   db:
     image: postgres:13
@@ -13,10 +15,9 @@ services:
       - POSTGRES_PASSWORD=pink_code
       - POSTGRES_DB=pink_code
     ports:
-      - "5432:5432" 
+      - "5432:5432"
     networks:
       leetcode_network:
-        ipv4_address: 192.168.10.2 
 
   web:
     build: .
@@ -27,12 +28,21 @@ services:
       - "8000:8000"
     depends_on:
       - redis
-      - db 
+      - db
     networks:
       leetcode_network:
-        ipv4_address: 192.168.10.3
-      frontend_network: 
-        ipv4_address: 192.168.20.2
+      frontend_network:
+  
+  # frontend:
+  #   image: nginx:latest
+  #   ports:
+  #     - "3000:80"
+  #   volumes:
+  #     - ./frontend:/usr/share/nginx/html
+  #   depends_on:
+  #     - web
+  #   networks:
+  #     frontend_network:
 
   celery:
     build: .
@@ -47,7 +57,6 @@ services:
       - CELERY_BROKER_URL=redis://redis:6379/0
     networks:
       leetcode_network:
-        ipv4_address: 192.168.10.4
 
   celery-beat:
     build: .
@@ -61,19 +70,7 @@ services:
       - CELERY_BROKER_URL=redis://redis:6379/0
     networks:
       leetcode_network:
-        ipv4_address: 192.168.10.5
-  
-  # frontend: 
-  #   image: nginx:latest
-  #   ports:
-  #     - "3000:80" 
-  #   volumes:
-  #     - ./frontend:/usr/share/nginx/html 
-  #   depends_on: 
-  #     - web
-  #   networks:
-  #     frontend_network:
-  #       ipv4_address: 192.168.20.3
+
 
 networks:
   leetcode_network:
@@ -81,13 +78,13 @@ networks:
     ipam:
       driver: default
       config:
-        - subnet: 192.168.10.0/24 
-  frontend_network: 
+        - subnet: 192.168.10.0/24
+  frontend_network:
     name: frontend_network
     ipam:
       driver: default
       config:
         - subnet: 192.168.20.0/24
-    
+
 volumes:
-  postgres_data: 
+  postgres_data:

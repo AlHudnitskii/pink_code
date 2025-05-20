@@ -1,0 +1,95 @@
+body {
+    background-color: #121212;
+    color: #ff4081;
+    font-family: sans-serif;
+    margin: 0;
+    padding-top: 60px; 
+    box-sizing: border-box;
+}
+
+.navbar {
+    background-color: #1e1e1e !important;
+    border-bottom: 1px solid #ff4081;
+    padding: 10px 20px;
+    width: 100%;
+    box-sizing: border-box;
+    position: fixed;
+    top: 0;
+    z-index: 100;
+}
+
+.navbar-brand {
+    color: #ff4081 !important;
+    font-size: 1.5em;
+    font-weight: bold;
+}
+
+.navbar-toggler {
+    border-color: #ff4081;
+}
+
+.navbar-toggler-icon {
+    background-image: url("data:image/svg+xml,%3csvg viewBox='0 0 30 30' xmlns='http://www.w3.org/2000/svg'%3e%3cpath stroke='rgba(255,64,129,0.7)' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+}
+
+.navbar-nav .nav-item {
+    margin-left: 15px;
+}
+
+.navbar-nav .nav-link {
+    color: #eee !important;
+    transition: color 0.3s ease;
+}
+
+.navbar-nav .nav-link:hover {
+    color: #ff4081 !important;
+}
+
+.navbar-nav.ml-auto .nav-item {
+    margin-left: 0;
+    margin-right: 15px;
+}
+
+.table-responsive {
+    padding: 20px;
+}
+
+.table {
+    color: #eee;
+    border-collapse: collapse;
+    width: 100%;
+    margin-bottom: 20px;
+}
+
+.table thead th {
+    color: #ff4081;
+    font-weight: bold;
+    padding: 12px 15px;
+    text-align: left;
+    border-bottom: 2px solid #ff4081;
+}
+
+.table tbody td {
+    padding: 12px 15px;
+    text-align: left;
+    border-bottom: 1px solid #333;
+}
+
+.table tbody tr:nth-child(even) {
+    background-color: #222;
+}
+
+.table-hover tbody tr:hover {
+    background-color: #333;
+    cursor: pointer;
+}
+
+#problem-table-body td a {
+    color: #eee;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+#problem-table-body td a:hover {
+    color: #ff4081;
+}
