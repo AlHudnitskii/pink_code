@@ -30,8 +30,8 @@ class TestCaseSerializer(serializers.ModelSerializer):
             "problem", "input_data", "expected_output"
         ]   
 
-    # def create(self, validated_data: dict, id_problem: int):
-    #     problem = Problem.objects.get(id=id_problem)
-    #     test_case = TestCase.objects.create(problem=problem, **validated_data)
-    #     return test_case
+    def create(self, validated_data: dict, id_problem: int):
+        problem = Problem.objects.get(id=id_problem)
+        test_case = TestCase.objects.create(problem=problem, **validated_data)
+        return test_case
     

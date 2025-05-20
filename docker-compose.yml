@@ -63,17 +63,17 @@ services:
       leetcode_network:
         ipv4_address: 192.168.10.5
   
-  frontend: 
-    image: nginx:latest
-    ports:
-      - "3000:80" 
-    volumes:
-      - ./frontend:/usr/share/nginx/html 
-    depends_on: 
-      - web
-    networks:
-      frontend_network:
-        ipv4_address: 192.168.20.3
+  # frontend: 
+  #   image: nginx:latest
+  #   ports:
+  #     - "3000:80" 
+  #   volumes:
+  #     - ./frontend:/usr/share/nginx/html 
+  #   depends_on: 
+  #     - web
+  #   networks:
+  #     frontend_network:
+  #       ipv4_address: 192.168.20.3
 
 networks:
   leetcode_network:
