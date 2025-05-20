@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Solution Detail</title>
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="styles/hidden.css">
+    <link rel="stylesheet" href="styles/base.css">
 </head>
 <body>
     <nav class="navbar navbar-expand-lg navbar-light bg-light sticky-top">
@@ -40,7 +40,6 @@
         </div>
     </nav>
 
-    <!-- Solution Detail Content -->
     <div class="container">
         <div class="card">
             <div class="card-header">
@@ -64,38 +63,6 @@
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
-    <script>
-        const token = localStorage.getItem('accessToken');
-        if (!token) {
-            alert("You are not logged in. Please log in first.");
-            window.location.href = "login.html"; // Redirect to login page
-        }
-        const urlParams = new URLSearchParams(window.location.search);
-        const solutionId = urlParams.get('id');
-
-        fetch(`http://localhost:8000/api/u/solution/${solutionId}/`, {
-            method: 'GET',
-            headers: {
-                'Authorization': `Bearer ${token}`,
-                'Content-Type': 'application/json',
-                'Accept': 'application/json'
-            }
-        })
-        .then(response => response.json())
-        .then(data => {
-            document.getElementById('problem-title').innerText = data.problem.title;
-            document.getElementById('submission-status').innerText = data.passed ? 'Accepted' : 'Rejected';
-            document.getElementById('submission-status').className = data.passed ? 'badge badge-success' : 'badge badge-danger';
-            document.getElementById('submission-time').innerText = `Submitted: ${new Date(data.executed_at).toLocaleString()}`;
-            document.getElementById('test-cases-passed').innerText = data.test_cases_passed;
-            document.getElementById('runtime').innerText = data.lead_time;
-            document.getElementById('memory').innerText = data.memory_used;
-            document.getElementById('submitted-code').innerText = data.user_code;
-
-        })
-        .catch(error => {
-            console.error('Error fetching solution detail:', error);
-        });
-    </script>
+    <script src="scripts/solution.js"></script>
 </body>
 </html>

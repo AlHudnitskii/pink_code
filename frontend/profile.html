@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>User Profile</title>
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="styles/hidden.css">
+    <link rel="stylesheet" href="styles/base.css">
 </head>
 <body>
     <nav class="navbar navbar-expand-lg navbar-light bg-light sticky-top">
@@ -40,17 +40,12 @@
         </div>
     </nav>
 
-    <!-- Sidebar -->
     <div class="sidebar">
         <h4 id="username">Username</h4>
         <p id="rank">Rank: </p>
-        <h5>Languages</h5>
-        <div id="languages">
-            <span class="badge badge-secondary">Python3</span> int problems solved
-        </div>
+        <!--- Add something like sol count testcases count problem count etc-->
     </div>
 
-    <!-- Main Content -->
     <div class="content">
         <div class="card">
             <div class="card-header">
@@ -80,44 +75,7 @@
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-    <script>
-        const token = localStorage.getItem('accessToken');
-        if (!token) {
-            alert("You are not logged in. Please log in first.");
-            window.location.href = "login.html";
-        }
-
-        fetch('http://localhost:8000/api/u/profile/', {
-            method: 'GET',
-            headers: {
-                'Authorization': `Bearer ${token}`,
-                'Content-Type': 'application/json',
-                'Accept': 'application/json'
-            }
-        })
-        .then(response => response.json())
-        .then(data => {
-            document.getElementById('username').innerText = data.username;
-            document.getElementById('rank').innerText = `Rank: ${data.rank}`;
-            document.getElementById('was_complited_problems').innerText = data.was_complited_problems;
-
-            const solvedProblemsTable = document.getElementById('solved_problems_table');
-            solvedProblemsTable.innerHTML = '';
-            data.solved_problems.forEach(problem => {
-                const row = document.createElement('tr');
-                row.innerHTML = `
-                    <td><a href="solution.html?id=${problem.id}" class="text-white">${problem.problem.id}. ${problem.problem.title}</a></td>
-                    <td>Python</td>
-                    <td>${problem.passed ? 'Yes' : 'No'}</td>
-                    <td>${new Date(problem.executed_at).toLocaleDateString()}</td>
-                `;
-                solvedProblemsTable.appendChild(row);
-            });
-        })
-        .catch(error => {
-            console.error('Error fetching user profile:', error);
-        });
-    </script>
+    <script src="scripts/profile.js"></script>
 </body>
 </html>
 

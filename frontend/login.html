@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login</title>
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="styles/hidden.css">
+    <link rel="stylesheet" href="styles/base.css">
 </head>
 <body>
     <nav class="navbar navbar-expand-lg navbar-light bg-light sticky-top">
@@ -58,34 +58,6 @@
             </div>
         </div>
     </div>
-    <script src="scripts/auth.js"></script>
-    <script>
-        document.getElementById('login-form').addEventListener('submit', function(e) {
-            e.preventDefault();
-            const usernameOrEmail = document.getElementById('usernameOrEmail').value;
-            const password = document.getElementById('password').value;
-            login(usernameOrEmail, password)
-            async function login(usernameOrEmail, password) {
-                const response = await fetch('http://localhost:8000/api/auth/login/', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        username_or_email: usernameOrEmail,
-                        password: password
-                    })
-                });
-
-                if (!response.ok) {
-                    throw new Error('Login failed');
-                }
-
-                const data = await response.json();
-                localStorage.setItem('accessToken', data.access);
-                localStorage.setItem('refreshToken', data.refresh);
-            }
-        });
-    </script>
+    <script src="scripts/login.js"></script>
 </body>
 </html>

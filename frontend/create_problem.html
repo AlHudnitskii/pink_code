@@ -5,42 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Create Problem</title>
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="styles/hidden.css">
+    <link rel="stylesheet" href="styles/base.css">
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg navbar-light bg-light sticky-top">
-        <a class="navbar-brand" href="index.html">PinkCode</a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav">
-                <li class="nav-item">
-                    <a class="nav-link" href="problems.html">Problems</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="create_problem.html">Create problem</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="top_users.html">Top users</a>
-                </li>
-            </ul>
-            <ul class="navbar-nav ml-auto" id="authPages">
-                <li class="nav-item">
-                    <a class="nav-link" href="profile.html">Profile</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="login.html">Login</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="register.html">Register</a>
-                </li>
-            </ul>
-            
-        </div>
-    </nav>
-
-    <!-- Sidebar -->
     <div class="sidebar">
         <h4>Have you txt file with testcases?</h4>
         <ul class="nav flex-column">
@@ -53,8 +20,7 @@
         </ul>
     </div>
 
-    <!-- Main Content -->
-    <div class="content">
+   <div class="content">
         <div class="card">
             <div class="card-header">
                 <h2>Create a New Problem</h2>
@@ -101,55 +67,6 @@
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-    <script>
-        const token = localStorage.getItem('accessToken');
-        if (!token) {
-            alert("You are not logged in. Please log in first.");
-            window.location.href = "login.html";
-        }
-
-        document.getElementById('createProblemForm').addEventListener('submit', function(event) {
-            event.preventDefault();
-
-            const type = document.getElementById('type').value;
-            const title = document.getElementById('title').value;
-            const subtitle = document.getElementById('subtitle').value;
-            const description = document.getElementById('description').value;
-            const firstLine = document.getElementById('firstLine').value;
-            const difficulty = document.getElementById('difficulty').value;
-
-            const problemData = {
-                type: type,
-                title: title,
-                subtitle: subtitle,
-                description: description,
-                fst_line: firstLine,
-                difficulty: difficulty
-            };
-
-            fetch('http://localhost:8000/api/main/problem/', {
-                method: 'POST',
-                headers: {
-                    'Authorization': `Bearer ${token}`,
-                    'Content-Type': 'application/json',
-                    'Accept': 'application/json'
-                },
-                body: JSON.stringify(problemData)
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.id) {
-                    alert("Problem created successfully.");
-                    window.location.href = `problem_details.html?id=${data.id}`;
-                } else {
-                    alert("Error creating problem: " + JSON.stringify(data));
-                }
-            })
-            .catch(error => {
-                console.error('Error creating problem:', error);
-                alert('Error creating problem. Check console for details.');
-            });
-        });
-    </script>
+    <script src="scripts/create_problem.js"></script>    
 </body>
 </html>

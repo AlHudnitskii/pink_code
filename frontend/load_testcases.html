@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Upload Test Cases</title>
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="styles/hidden.css">
+    <link rel="stylesheet" href="styles/base.css">
 </head>
 <body>
     <nav class="navbar navbar-expand-lg navbar-light bg-light sticky-top">
@@ -40,7 +40,6 @@
         </div>
     </nav>
 
-    <!-- Upload Form -->
     <div class="container upload-container">
         <h2>Upload Test Cases</h2>
         <form id="uploadForm" enctype="multipart/form-data">
@@ -67,52 +66,9 @@
             </ul>
         </div>
     </div>
-
-    <script>
-        document.getElementById('uploadForm').addEventListener('submit', function(event) {
-            event.preventDefault();
-
-            const problemId = document.getElementById('problemId').value;
-            const fileInput = document.getElementById('fileInput').files[0];
-            const formData = new FormData();
-            formData.append('file', fileInput);
-            formData.append('problem_id', problemId);
-
-            const token = localStorage.getItem('accessToken');
-            if (!token) {
-                document.getElementById('uploadResult').innerHTML = `<div class="alert alert-danger">Error: Missing access token. Please log in.</div>`;
-                return;
-            }
-
-            fetch(`http://localhost:8000/api/main/problem/${problemId}/load-testcases/`, {
-                method: 'POST',
-                headers: {
-                    'Authorization': `Bearer ${token}`,
-                },
-                body: formData
-            })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
-                return response.json();
-            })
-            .then(data => {
-                const resultDiv = document.getElementById('uploadResult');
-                if (data.error) {
-                    resultDiv.innerHTML = `<div class="alert alert-danger">${data.error}</div>`;
-                } else {
-                    resultDiv.innerHTML = `<div class="alert alert-success">Test cases uploaded successfully.</div>`;
-                }
-            })
-            .catch(error => {
-                document.getElementById('uploadResult').innerHTML = `<div class="alert alert-danger">Error uploading test cases: ${error.message}</div>`;
-            });
-        });
-    </script>
-
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="scripts/load_testcases.js"></script>
 </body>
 </html>
