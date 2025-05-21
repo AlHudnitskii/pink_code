@@ -30,19 +30,23 @@ services:
       - redis
       - db
     networks:
-      leetcode_network:
-      frontend_network:
-  
-  # frontend:
-  #   image: nginx:latest
-  #   ports:
-  #     - "3000:80"
-  #   volumes:
-  #     - ./frontend:/usr/share/nginx/html
-  #   depends_on:
-  #     - web
-  #   networks:
-  #     frontend_network:
+      - leetcode_network
+      - frontend_network
+    environment:
+      FRONTEND_URL: http://frontend:3001
+
+  frontend:
+    image: nginx:latest
+    ports:
+      - "3001:80"
+    volumes:
+      - ./frontend:/usr/share/nginx/html:ro
+    depends_on:
+      - web
+    networks:
+      - frontend_network
+    environment:
+      BACKEND_API_URL: http://web:8000
 
   celery:
     build: .
@@ -54,7 +58,7 @@ services:
       - redis
       - web
     environment:
-      - CELERY_BROKER_URL=redis://redis:6379/0
+      CELERY_BROKER_URL: redis://redis:6379/0
     networks:
       leetcode_network:
 
@@ -67,10 +71,9 @@ services:
     depends_on:
       - redis
     environment:
-      - CELERY_BROKER_URL=redis://redis:6379/0
+      CELERY_BROKER_URL: redis://redis:6379/0
     networks:
       leetcode_network:
-
 
 networks:
   leetcode_network:
