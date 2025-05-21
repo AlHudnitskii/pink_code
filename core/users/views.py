@@ -10,7 +10,7 @@ from core.auth_.permissions import CustomIsAuthenticatedPermission
 from core.code_interpreter.serializers import SolutionResultSerializer
 from core.main.models import SolutionResult
 from core.users.serializers import TopUserSerializer, UserProfileSerializer
-from core.utils import CustomPagination
+from core.utils.custom_paginator import CustomPagination
 
 class ProfileView(APIView):
     permission_classes = [CustomIsAuthenticatedPermission]
