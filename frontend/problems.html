@@ -37,9 +37,35 @@
                     <a class="nav-link" href="register.html">Register</a>
                 </li>
             </ul>
-            
         </div>
     </nav>
+
+    <div class="container-fluid mt-4">
+        <div class="row mb-3">
+            <div class="col-md-4">
+                <div class="input-group">
+                    <input type="text" id="searchInput" class="form-control" placeholder="Search by title..." aria-label="Search">
+                    <div class="input-group-append">
+                        <button class="btn btn-outline-secondary" type="button" id="searchButton">Search</button>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <select id="typeFilter" class="form-control">
+                    <option value="all">All Types</option>
+                    <option value="Algorithm">Algorithm</option>
+                    <option value="SQL">SQL</option>
+                </select>
+            </div>
+            <div class="col-md-4">
+                <select id="difficultySort" class="form-control">
+                    <option value="default">Default Order</option>
+                    <option value="easy">Easy to Hard</option>
+                    <option value="hard">Hard to Easy</option>
+                </select>
+            </div>
+        </div>
+    </div>
 
     <div class="table-responsive">
         <table class="table table-dark table-hover">
@@ -53,10 +79,6 @@
             <tbody id="problem-table-body"></tbody>
         </table>
     </div>
-
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <script src="scripts/problems.js"></script>
 </body>
 </html>
