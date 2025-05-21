@@ -9,3 +9,4 @@ venv/
 .pylintrc
 ficture.json
 migrations/
+custom_json_serializer/
