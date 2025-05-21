@@ -1,5 +1,4 @@
 __pycache__/
-migrations/
 .vscode/
 db.*
 venv/
@@ -9,4 +8,5 @@ celerybeat-schedule
 venv/
 .pylintrc
 ficture.json
-custom_json_serializer/
+core/custom_json_serializer/
+migrations/
