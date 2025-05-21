@@ -8,5 +8,4 @@ celerybeat-schedule
 venv/
 .pylintrc
 ficture.json
-core/custom_json_serializer/
 migrations/
