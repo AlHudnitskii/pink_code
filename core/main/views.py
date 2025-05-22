@@ -62,23 +62,7 @@ class ProblemCreateView(APIView):
         serializer.save()
         return Response(serializer.data)
     
-# class TestCaseView(APIView):
-#     permission_classes = [CustomIsAdminPermission]
-#     def post(self, request, *args, **kwargs):
-#         problem_id = request.data.get('problem')
-#         user = self.request.user
-#         try:
-#             problem = Problem.objects.get(id=problem_id)
-#         except Problem.DoesNotExist:
-#             return Response({"error": "Problem does not exist."}, status=status.HTTP_404_NOT_FOUND)
-
-#         if problem.author != user:
-#             return Response({"error": "You are not the author of this problem."}, status=status.HTTP_403_FORBIDDEN)
-#         serializer = TestCaseSerializer(data=request.data)
-#         serializer.is_valid(raise_exception=True)
-#         serializer.save()
-#         return Response(serializer.data)
-
+    
 class TestCaseView(APIView):
     permission_classes = [CustomIsAdminPermission]
     def post(self, request, *args, **kwargs):
@@ -186,7 +170,6 @@ class LoadTestCasesView(APIView):
             testcases = read_and_convert_file_to_json(file, problem_id)
             if testcases is False:
                 return Response({"error": "Invalid format in file"}, status=400)
-            # return Response({"message": testcases})
             test_cases = [TestCase(**data) for data in testcases]
             non_serialized_data = TestCase.objects.bulk_create(test_cases)
             serialized_data = TestCaseSerializer(non_serialized_data, many=True)

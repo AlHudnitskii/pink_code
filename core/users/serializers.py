@@ -27,21 +27,20 @@ class UserProfileSerializer(serializers.ModelSerializer):
                 expression=RowNumber(),
                 order_by=F('solved_problems_count').desc()
             )
-        ).values('id', 'rank')  
+        ).values('id', 'rank')
         self.user_ranks = {user['id']: user['rank'] for user in ranked_users}
 
     def get_rank(self, obj):
         return self.user_ranks.get(obj.id, None)
-    
+
     def get_solved_problems(self, obj):
         solved_problems = SolutionResult.objects.filter(user=obj, passed=True).order_by("-executed_at")
         return UserProfileSolutionResultSerializer(solved_problems, many=True).data
-        
-    def get_was_complited_problems(self, obj):
-        complited_problems = SolutionResult.objects.filter(user=obj, passed=True).aggregate(count=Count("id"))
-        return complited_problems["count"]
 
-    
+    def get_was_complited_problems(self, obj):
+        unique_solved_problems_count = SolutionResult.objects.filter(user=obj, passed=True).values('problem').distinct().count()
+        return unique_solved_problems_count
+
 
 class UserProfileSolutionResultSerializer(serializers.ModelSerializer):
     class Meta:
@@ -56,12 +55,16 @@ class UserProfileSolutionResultSerializer(serializers.ModelSerializer):
             "title": problem.title,
         }
         return representation
-    
+
 
 class TopUserSerializer(serializers.ModelSerializer):
     position = serializers.IntegerField()
-    solved_problems = serializers.IntegerField()
+    solved_problems = serializers.SerializerMethodField() 
 
     class Meta:
         model = User
         fields = ["position", "id", "username", "solved_problems"]
+
+    def get_solved_problems(self, obj):
+        unique_solved_problems_count = SolutionResult.objects.filter(user=obj, passed=True).values('problem').distinct().count()
+        return unique_solved_problems_count
