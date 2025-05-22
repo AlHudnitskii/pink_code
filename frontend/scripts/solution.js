@@ -19,12 +19,9 @@ fetch(`http://localhost:8000/api/u/solution/${solutionId}/`, {
    document.getElementById('problem-title').innerText = data.problem.title;
    document.getElementById('submission-status').innerText = data.passed ? 'Accepted' : 'Rejected';
    document.getElementById('submission-status').className = data.passed ? 'badge badge-success' : 'badge badge-danger';
-   document.getElementById('submission-time').innerText = `Submitted: ${new Date(data.executed_at).toLocaleString()}`;
-   document.getElementById('test-cases-passed').innerText = data.test_cases_passed;
    document.getElementById('runtime').innerText = data.lead_time;
    document.getElementById('memory').innerText = data.memory_used;
-   document.getElementById('submitted-code').innerText = data.user_code;
-
+   document.getElementById('submitted-code').textContent = data.user_code;
 })
 .catch(error => {
    console.error('Error fetching solution detail:', error);
