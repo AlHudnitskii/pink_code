@@ -12,7 +12,6 @@ from core.auth_.permissions import CustomIsAuthenticatedPermission
 from core.code_interpreter.serializers import SolutionResultSerializer
 from core.executor.tasks import run_user_code
 from core.main.models import TestCase
-from core.code_interpreter.proccessing_json import proccess_result
 
 class RunCodeView(APIView):
     permission_classes = [CustomIsAuthenticatedPermission]
@@ -43,33 +42,7 @@ class SubmitCodeView(APIView):
 
         return Response({"task_id": task.id})
     
-
-# class TaskStatusView(APIView):
-#     def get(self, request, task_id, *args, **kwargs):
-#         task = AsyncResult(task_id)
-
-#         if task.state == 'PENDING':
-#             response = {
-#                 'state': task.state,
-#                 'result': 'Task is still pending...'
-#             }
-#         elif task.state != 'FAILURE':
-#             response = {
-#                 'state': task.state,
-#                 'result': task.result
-#             }
-#         else:
-#             response = {
-#                 'state': task.state,
-#                 'result': str(task.info),
-#             }
-#         if response["state"] == "SUCCESS" and "error" not in response["result"]:
-#             result = response["result"]
-#             print(f"Celery Result: {result}")
-#             json_result = proccess_result(result)
-#             response["result"] = json_result
-#         return Response(response)
-
+    
 class TaskStatusView(APIView):
     def get(self, request, task_id, *args, **kwargs):
         task = AsyncResult(task_id)
@@ -82,7 +55,6 @@ class TaskStatusView(APIView):
         if task.state == 'PENDING':
             response_data['result'] = 'Task is still pending...'
         elif task.state == 'SUCCESS':
-            # Теперь task.result - это уже распарсенный словарь
             response_data['result'] = task.result
         elif task.state == 'FAILURE':
             response_data['result'] = str(task.info)
