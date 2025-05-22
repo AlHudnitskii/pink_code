@@ -64,27 +64,13 @@ class TaskStatusView(APIView):
         return Response(response_data)
     
 
-# class SaveSolutionResultView(APIView):
-#     permission_classes = [CustomIsAuthenticatedPermission]  
-#     def post(self, request, problem_id, *args, **kwargs):
-#         serializer = SolutionResultSerializer(data=request.data, context={'request': request})
-#         try:
-#             serializer.is_valid(raise_exception=True)
-#             serializer.save(problem_id=problem_id) 
-#             return Response(serializer.data, status=status.HTTP_201_CREATED)
-#         except serializers.ValidationError as e:
-#             return Response(e.detail, status=status.HTTP_400_BAD_REQUEST)
-#         except Exception as e:
-#             print(e)
-#             return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-
 class SaveSolutionResultView(APIView):
     permission_classes = [CustomIsAuthenticatedPermission]
     def post(self, request, problem_id, *args, **kwargs):
         serializer = SolutionResultSerializer(data=request.data, context={'user': request.user, 'problem_id': problem_id})
         try:
             serializer.is_valid(raise_exception=True)
-            serializer.save() 
+            serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         except serializers.ValidationError as e:
             return Response(e.detail, status=status.HTTP_400_BAD_REQUEST)
