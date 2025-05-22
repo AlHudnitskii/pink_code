@@ -62,6 +62,23 @@ class ProblemCreateView(APIView):
         serializer.save()
         return Response(serializer.data)
     
+# class TestCaseView(APIView):
+#     permission_classes = [CustomIsAdminPermission]
+#     def post(self, request, *args, **kwargs):
+#         problem_id = request.data.get('problem')
+#         user = self.request.user
+#         try:
+#             problem = Problem.objects.get(id=problem_id)
+#         except Problem.DoesNotExist:
+#             return Response({"error": "Problem does not exist."}, status=status.HTTP_404_NOT_FOUND)
+
+#         if problem.author != user:
+#             return Response({"error": "You are not the author of this problem."}, status=status.HTTP_403_FORBIDDEN)
+#         serializer = TestCaseSerializer(data=request.data)
+#         serializer.is_valid(raise_exception=True)
+#         serializer.save()
+#         return Response(serializer.data)
+
 class TestCaseView(APIView):
     permission_classes = [CustomIsAdminPermission]
     def post(self, request, *args, **kwargs):
@@ -74,7 +91,7 @@ class TestCaseView(APIView):
 
         if problem.author != user:
             return Response({"error": "You are not the author of this problem."}, status=status.HTTP_403_FORBIDDEN)
-        serializer = TestCaseSerializer(data=request.data)
+        serializer = TestCaseSerializer(data=request.data, context={'id_problem': problem_id})  
         serializer.is_valid(raise_exception=True)
         serializer.save()
         return Response(serializer.data)

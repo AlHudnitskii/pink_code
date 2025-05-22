@@ -23,15 +23,21 @@ class ProblemSerializer(serializers.ModelSerializer):
         }
         return representation
 
+
 class TestCaseSerializer(serializers.ModelSerializer):
     class Meta:
         model = TestCase
-        fields = [
-            "problem", "input_data", "expected_output"
-        ]   
+        fields = ['id', 'input_data', 'expected_output']
+        read_only_fields = ['id']
 
-    def create(self, validated_data: dict, id_problem: int):
-        problem = Problem.objects.get(id=id_problem)
+    def create(self, validated_data):
+        id_problem = self.context.get('id_problem')
+        if id_problem is None:
+            raise serializers.ValidationError("Problem ID is required to create a test case.")
+        try:
+            problem = Problem.objects.get(id=id_problem)
+        except Problem.DoesNotExist:
+            raise serializers.ValidationError(f"Problem with ID {id_problem} does not exist.")
+
         test_case = TestCase.objects.create(problem=problem, **validated_data)
-        return test_case
-    
+        return test_case    
