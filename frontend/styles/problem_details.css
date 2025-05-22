@@ -273,3 +273,7 @@ hr {
 .btn-custom:hover {
     background-color: #e63877;
 }
+
+#test-output {
+    color: #ff4081; 
+}
