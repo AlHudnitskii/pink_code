@@ -44,30 +44,52 @@ class SubmitCodeView(APIView):
         return Response({"task_id": task.id})
     
 
+# class TaskStatusView(APIView):
+#     def get(self, request, task_id, *args, **kwargs):
+#         task = AsyncResult(task_id)
+
+#         if task.state == 'PENDING':
+#             response = {
+#                 'state': task.state,
+#                 'result': 'Task is still pending...'
+#             }
+#         elif task.state != 'FAILURE':
+#             response = {
+#                 'state': task.state,
+#                 'result': task.result
+#             }
+#         else:
+#             response = {
+#                 'state': task.state,
+#                 'result': str(task.info),
+#             }
+#         if response["state"] == "SUCCESS" and "error" not in response["result"]:
+#             result = response["result"]
+#             print(f"Celery Result: {result}")
+#             json_result = proccess_result(result)
+#             response["result"] = json_result
+#         return Response(response)
+
 class TaskStatusView(APIView):
     def get(self, request, task_id, *args, **kwargs):
         task = AsyncResult(task_id)
 
+        response_data = {
+            'state': task.state,
+            'result': None
+        }
+
         if task.state == 'PENDING':
-            response = {
-                'state': task.state,
-                'result': 'Task is still pending...'
-            }
-        elif task.state != 'FAILURE':
-            response = {
-                'state': task.state,
-                'result': task.result
-            }
-        else:
-            response = {
-                'state': task.state,
-                'result': str(task.info),
-            }
-        if response["state"] == "SUCCESS" and "error" not in response["result"]:
-            result = response["result"]
-            json_result = proccess_result(result)
-            response["result"] = json_result
-        return Response(response)
+            response_data['result'] = 'Task is still pending...'
+        elif task.state == 'SUCCESS':
+            # Теперь task.result - это уже распарсенный словарь
+            response_data['result'] = task.result
+        elif task.state == 'FAILURE':
+            response_data['result'] = str(task.info)
+        elif task.state == 'REVOKED':
+            response_data['result'] = 'Task was revoked.'
+        
+        return Response(response_data)
     
 
 class SaveSolutionResultView(APIView):

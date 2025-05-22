@@ -66,24 +66,24 @@ function fetchTaskStatus(taskId, intervalId, saveResult) {
    })
    .then(response => response.json())
    .then(resultData => {
-         console.log('Result Data:', resultData);
-         if (resultData.state === 'SUCCESS') {
-            clearInterval(intervalId);
-            const formattedResult = formatJSON(resultData.result);
-            document.getElementById('test-output').innerHTML = `<pre class="formatted-json">${formattedResult}</pre>`;
-            if (saveResult && resultData.result.passed) { 
-               saveSolution(resultData.result);
-            }
-         } else if (resultData.state === 'FAILURE' || resultData.state === 'REVOKED') {
-            clearInterval(intervalId);
-            document.getElementById('test-output').innerText = 'Error: ' + resultData.result;
-         }
-   })
-   .catch(error => {
-         clearInterval(intervalId);
-         document.getElementById('test-output').innerText = 'Error fetching task status: ' + error.message;
-         console.error('Error fetching task status:', error);
-   });
+    console.log('Result Data:', resultData);
+    if (resultData.state === 'SUCCESS') {
+        clearInterval(intervalId);
+        const formattedResult = formatJSON(resultData.result);
+        document.getElementById('test-output').innerHTML = `<pre class="formatted-json">${formattedResult}</pre>`;
+        if (saveResult && resultData.result && resultData.result.passed) { // Добавлена проверка на null
+            saveSolution(resultData.result);
+        }
+    } else if (resultData.state === 'FAILURE' || resultData.state === 'REVOKED') {
+        clearInterval(intervalId);
+        document.getElementById('test-output').innerText = 'Error: ' + (resultData.result ? resultData.result : 'Unknown error'); // Проверка на null
+    }
+})
+.catch(error => {
+    clearInterval(intervalId);
+    document.getElementById('test-output').innerText = 'Error fetching task status: ' + error.message;
+    console.error('Error fetching task status:', error);
+});
 }
 
 function runCode(saveResult) {
@@ -109,35 +109,7 @@ function runCode(saveResult) {
          console.error('Error running code:', error);
    });
 }
-/*function submitCode(is_submit) {
-   const userCode = editor.getValue();
-   const problemId = parseInt(document.getElementById('problem-title').innerText.split('.')[0]);
-   const token = localStorage.getItem('token'); 
 
-   fetch(`http://localhost:8000/api/interpreter/submit-code/${problemId}/`, {
-         method: 'POST',
-         headers: {
-            'Authorization': `Bearer ${token}`,
-            'Content-Type': 'application/json'
-         },
-         body: JSON.stringify({ code: userCode })
-   })
-   .then(response => {
-         if (!response.ok) {
-            throw new Error('Network response was not ok'); 
-         }
-         return response.json();
-   })
-   .then(data => {
-         if (is_submit) {
-            saveSolution(problemId, data);
-         }
-   })
-   .catch(error => {
-         console.error('Error submitting code:', error);
-         alert('Error submitting code.');
-   });
-} */
 function submitCode(saveResult) {
    const code = editor.getValue();
    fetch(`http://localhost:8000/api/interpreter/submit-code/${problemId}/`, {
@@ -162,49 +134,10 @@ function submitCode(saveResult) {
    });
 } 
 
-/*function saveSolution(result) {
-   const userId = localStorage.getItem('user_id'); 
-   fetch('http://localhost:8000/api/interpreter/save-solution/', {
-         method: 'POST',
-         headers: {
-            'Authorization': `Bearer ${token}`,
-            'Content-Type': 'application/json'
-         },
-         body: JSON.stringify({
-            problem: problemId,
-            user: parseInt(userId),
-            lead_time: parseInt(result.lead_time_total_milliseconds),
-            memory_used: "20.04",
-            user_code: editor.getValue(),
-            passed: result.passed
-         })
-   })
-   .then(response => {
-         if (!response.ok) {
-            throw new Error('Network response was not ok');
-         }
-         var alertElement = document.querySelector('.alert-popup');
-         alertElement.style.display = 'block';
-
-         setTimeout(function() {
-            $(alertElement).alert('close');
-         }, 5000);
-         return response.text();
-   })
-   .then(saveData => {
-         if (saveData) {
-            console.log('Save Data:', JSON.parse(saveData));
-         } else {
-            console.log('Save Data: No content');
-         }
-   })
-   .catch(error => console.error('Error saving solution:', error));
-} */
-
 function saveSolution(result) {
    const problemId = parseInt(document.getElementById('problem-title').innerText.split('.')[0]);
    //const token = localStorage.getItem('token');
-   fetch(`http://localhost:8000/api/interpreter/save-solution//${problemId}/`, {
+   fetch(`http://localhost:8000/api/interpreter/save-solution/${problemId}/`, {
          method: 'POST',
          headers: {
             'Authorization': `Bearer ${token}`,
