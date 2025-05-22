@@ -1,5 +1,4 @@
 import json
-#import custom_json_serializer 
 
 from rest_framework.views import APIView, status
 from rest_framework.response import Response
@@ -22,9 +21,7 @@ class RunCodeView(APIView):
         except Exception:
             return Response({"No problem with such id"})
         
-        #task = run_user_code.delay(str(request.user.id), user_code, custom_json_serializer.deserialize(testcases))
         task = run_user_code.delay(str(request.user.id), user_code, json.loads(testcases))
-
         return Response({"task_id": task.id})
 
 
@@ -37,9 +34,8 @@ class SubmitCodeView(APIView):
             testcases = serializers.serialize('json', TestCase.objects.filter(problem_id=id_problem))
         except Exception:
             return Response({"No problem with such id"})
-        #task = run_user_code.delay(str(request.user.id), user_code, custom_json_serializer.deserialize(testcases))
+        
         task = run_user_code.delay(str(request.user.id), user_code, json.loads(testcases))
-
         return Response({"task_id": task.id})
     
     
@@ -76,4 +72,4 @@ class SaveSolutionResultView(APIView):
             return Response(e.detail, status=status.HTTP_400_BAD_REQUEST)
         except Exception as e:
             print(e)
-            return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+            return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)        
