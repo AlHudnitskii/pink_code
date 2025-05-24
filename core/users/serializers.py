@@ -6,6 +6,7 @@ from django.db.models.functions import RowNumber
 from core.auth_.models import User
 from core.main.models import SolutionResult
 
+
 class UserProfileSerializer(serializers.ModelSerializer):
     solved_problems = serializers.SerializerMethodField()
     was_complited_problems = serializers.SerializerMethodField()

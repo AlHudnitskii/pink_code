@@ -12,6 +12,7 @@ from core.main.models import SolutionResult
 from core.users.serializers import TopUserSerializer, UserProfileSerializer
 from core.utils.custom_paginator import CustomPagination
 
+
 class ProfileView(APIView):
     permission_classes = [CustomIsAuthenticatedPermission]
     def get(self, request, *args, **kwargs):

@@ -1,9 +1,8 @@
 import subprocess
-import custom_json_serializer
 import logging
 
 from celery import shared_task
-
+from core.custom_json_serializer import custom_json_serializer
 
 logging.basicConfig(level=logging.INFO)
 
@@ -16,19 +15,28 @@ def run_user_code(user_id: str, user_code, test_cases_json):
         user_id, user_code, custom_json_serializer.dumps(test_cases_json)
     ]
     
-
     logging.debug(f"{type(user_code)}, {type(test_cases_json)}")
     logging.info(f"Running command: {' '.join(command)}")
 
     result = subprocess.run(command, capture_output=True, text=True)
-            
-    output_lines = result.stdout.splitlines()
-    json_output = None
-    for line in output_lines:
-        json_output = custom_json_serializer.loads(line)
-    if json_output is not None:
-        logging.info(f"JSON output: {json_output}")
-        return json_output        
+
+    if result.returncode != 0:
+        logging.error(f"Command error: {result.stderr}")
+        return {'error': result.stderr}
+    else:
+        logging.info(f"Command output: {result.stdout}")
+        
+        # Попробуем найти строку JSON в выводе
+        output_lines = result.stdout.splitlines()
+        json_output = None
+        for line in output_lines:
+            json_output = custom_json_serializer.loads(line)
+
+        if json_output is not None:
+            logging.info(f"JSON output: {json_output}")
+            return json_output
+
+
 
 # import subprocess
 # import json

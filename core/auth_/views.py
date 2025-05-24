@@ -27,20 +27,6 @@ class CustomJWTAuthentication(JWTAuthentication):
 class MyTokenObtaionPairView(TokenObtainPairView):
     serializer_class = MyTokenObtainPairSerializer
 
-# class BaseAuthenticate:
-#     def __init__(self, headers: dict) -> None:
-#         self.token = headers.get("Authorization", None)
-    
-#     def get_user_instance(self):
-#         if not self.token:
-#             raise AuthenticationFailed({"detail": "You cannot authenticate without authorization token"}, code=400)
-#         token_str = self.token.split()[1]
-#         token = AccessToken(token_str)
-#         user_id = token["user_id"]
-#         user_instance = User.objects.get(pk=user_id)
-#         return user_instance
-    
-
 class RegisterView(APIView):
     def post(self, request):
         serializer = UserCreateSerializer(data=request.data)

@@ -12,6 +12,7 @@ from core.code_interpreter.serializers import SolutionResultSerializer
 from core.executor.tasks import run_user_code
 from core.main.models import TestCase
 
+
 class RunCodeView(APIView):
     permission_classes = [CustomIsAuthenticatedPermission]
     def post(self, request, id_problem):
@@ -23,7 +24,6 @@ class RunCodeView(APIView):
         
         task = run_user_code.delay(str(request.user.id), user_code, json.loads(testcases))
         return Response({"task_id": task.id})
-
 
 
 class SubmitCodeView(APIView):

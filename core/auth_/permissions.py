@@ -1,9 +1,9 @@
 from rest_framework.permissions import BasePermission
 from rest_framework.exceptions import AuthenticationFailed
-
 from rest_framework_simplejwt.tokens import AccessToken
 
 from core.auth_.models import User
+
 
 class CustomIsAuthenticatedPermission(BasePermission):
     def has_permission(self, request, view):

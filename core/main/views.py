@@ -6,14 +6,12 @@ from rest_framework.parsers import FormParser, MultiPartParser
 
 from django.core.cache import cache
 
-from drf_yasg.utils import swagger_auto_schema
-from drf_yasg import openapi
-
 from core.auth_.models import User
 from core.auth_.permissions import CustomIsAdminPermission, CustomIsAuthenticatedPermission
 from core.main.models import Problem, Rate, SolutionResult, TestCase
 from core.main.serializers import ProblemSerializer, TestCaseSerializer
-from core.main.utils import file_is_valid, read_and_convert_file_to_json
+from core.utils.file_validator import file_is_valid 
+from core.utils.json_convertor import read_and_convert_file_to_json
 from core.utils.custom_paginator import CustomPagination
 
 
