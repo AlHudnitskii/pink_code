@@ -2,7 +2,10 @@ const apiUrl = 'http://localhost:8000/api/u/top-users/';
 let currentPage = 1;
 let pageSize = 10;
 const token = localStorage.getItem('accessToken');
-
+if (!token) {
+   alert("You are not logged in. Please log in first.");
+   window.location.href = "login.html";
+}
 document.addEventListener('DOMContentLoaded', function () {
       loadUsers(currentPage);
 
