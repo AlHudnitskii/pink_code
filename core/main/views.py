@@ -10,9 +10,9 @@ from core.auth_.models import User
 from core.auth_.permissions import CustomIsAdminPermission, CustomIsAuthenticatedPermission
 from core.main.models import Problem, Rate, SolutionResult, TestCase
 from core.main.serializers import ProblemSerializer, TestCaseSerializer
+from core.utils.custom_paginator import CustomPagination
 from core.utils.file_validator import file_is_valid 
 from core.utils.json_convertor import read_and_convert_file_to_json
-from core.utils.custom_paginator import CustomPagination
 
 
 class ProblemListView(generics.ListAPIView):

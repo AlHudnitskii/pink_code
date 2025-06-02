@@ -24,10 +24,7 @@ class UserProfileSerializer(serializers.ModelSerializer):
     def calculate_user_ranks(self):
         ranked_users = User.objects.annotate(
             solved_problems_count=Count("results"),
-            rank=Window(
-                expression=RowNumber(),
-                order_by=F('solved_problems_count').desc()
-            )
+            rank=Window(expression=RowNumber(),order_by=F('solved_problems_count').desc())
         ).values('id', 'rank')
         self.user_ranks = {user['id']: user['rank'] for user in ranked_users}
 

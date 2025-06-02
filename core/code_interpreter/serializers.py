@@ -1,6 +1,5 @@
 from rest_framework import serializers
 from core.main.models import SolutionResult, Problem
-from core.auth_.models import User
 from django.utils import timezone
 
 class SolutionResultSerializer(serializers.ModelSerializer):

@@ -27,7 +27,6 @@ def run_user_code(user_id: str, user_code, test_cases_json):
     else:
         logging.info(f"Command output: {result.stdout}")
         try:
-            # Попробуем найти строку JSON в выводе
             output_lines = result.stdout.splitlines()
             json_output = None
             for line in output_lines:

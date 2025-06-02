@@ -1,6 +1,7 @@
 from django.urls import path
 from .views import RunCodeView, SubmitCodeView, TaskStatusView, SaveSolutionResultView
 
+
 urlpatterns = [
     path('run-code/<int:id_problem>/', RunCodeView.as_view(), name='run_code'),
     path('submit-code/<int:id_problem>/', SubmitCodeView.as_view(), name='submit_code'), 

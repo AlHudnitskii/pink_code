@@ -8,9 +8,8 @@ class ProblemSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = Problem
-        fields = [
-            "id", "author", "title", "type", "subtitle", "description", "difficulty", "count_solutions", "fst_line"
-        ]
+        fields = ["id", "author", "title", "type", "subtitle", "description", "difficulty", "count_solutions", "fst_line" ]
+    
     def get_count_solutions(self, obj):
         return obj.get_count_solutions_of_problem()
     

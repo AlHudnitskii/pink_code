@@ -35,11 +35,8 @@ class TopUsersListView(generics.ListAPIView):
     serializer_class = TopUserSerializer
     pagination_class = CustomPagination
     def get_queryset(self):
-        top_users = User.objects.annotate(
-            solved_problems=Count("results"),
-            position=Window(
-                expression=RowNumber(),
-                order_by=F('solved_problems').desc()
-            )
+        top_users = User.objects.annotate(solved_problems=Count("results"),
+            position=Window(expression=RowNumber(),
+            order_by=F('solved_problems').desc())
         ).order_by("-solved_problems")
         return top_users

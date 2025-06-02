@@ -2,6 +2,7 @@ from django.urls import path
 
 from core.users.views import ProfileView, SolutionView, TopUsersListView
 
+
 app_name = "users"
 
 urlpatterns = [
