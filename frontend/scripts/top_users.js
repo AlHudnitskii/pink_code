@@ -1,4 +1,4 @@
-const apiUrl = 'http://localhost:8000/api/u/top-users/';
+const apiUrl = 'http://localhost:8000/api/users/top-users/';
 let currentPage = 1;
 let pageSize = 10;
 const token = localStorage.getItem('accessToken');

@@ -6,7 +6,7 @@ if (!token) {
 const urlParams = new URLSearchParams(window.location.search);
 const solutionId = urlParams.get('id');
 
-fetch(`http://localhost:8000/api/u/solution/${solutionId}/`, {
+fetch(`http://localhost:8000/api/users/solution/${solutionId}/`, {
    method: 'GET',
    headers: {
          'Authorization': `Bearer ${token}`,

@@ -48,7 +48,6 @@ docker-compose exec web python manage.py createsuperuser
 ### 4. Открыть платформу
 
 - Перейдите на [http://localhost:3001](http://localhost:3001) для работы с платформой.
-- Админка: [http://localhost:8000/admin/](http://localhost:8000/admin/)
 
 ## Структура проекта
 

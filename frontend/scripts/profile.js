@@ -4,7 +4,7 @@ if (!token) {
    window.location.href = "login.html";
 }
 
-fetch('http://localhost:8000/api/u/profile/', {
+fetch('http://localhost:8000/api/users/profile/', {
    method: 'GET',
    headers: {
          'Authorization': `Bearer ${token}`,
